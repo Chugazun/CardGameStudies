@@ -12,6 +12,7 @@ namespace CardGameTest.Entities.Cards
             Weight = 2;
             Desc = "Deals ■ damage";
             DiceNeeded = 1;
+            act = Action;
         }
 
         public Sword(byte id) : this()
@@ -19,10 +20,10 @@ namespace CardGameTest.Entities.Cards
             ID = id;
         }
 
-        public override void Action(int diceVal)
+        public void Action(int diceVal)
         {
             Game.Damage(Game.GetCurrentMonster(), diceVal);
-            Used = true;
+            Used = true;            
         }
     }
 }

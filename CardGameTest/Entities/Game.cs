@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CardGameTest.Services;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -8,6 +9,8 @@ namespace CardGameTest.Entities
     {
         static private Player _player;
         static private Monster _monster;
+        static private bool _dbUpdated = true;
+        static private SeedingService _seedingService;
 
         public static void StartCombat(Player player, Monster monster)
         {
@@ -17,7 +20,7 @@ namespace CardGameTest.Entities
         
         public static void PlayCard(Card card, int diceVal)
         {
-            if (!card.Used) card.Action(diceVal);
+            if (!card.checkUsed()) card.act(diceVal);
         }
 
         public static void Damage(Entity target, int dmgVal) => target.TakeDamage(dmgVal);
@@ -32,6 +35,18 @@ namespace CardGameTest.Entities
         public static Player GetCurrentPlayer()
         {
             return _player;
+        }
+
+        public static void GameInit(SeedingService seedingService)
+        {
+            _seedingService = seedingService;
+            _dbUpdated = _seedingService.Seed(_dbUpdated);
+        }
+
+        public static Card GetCardFromDb(string name)
+        {
+            Card card = _seedingService.FindByName(name);
+            return card;
         }
     }
 }

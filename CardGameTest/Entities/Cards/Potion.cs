@@ -12,6 +12,7 @@ namespace CardGameTest.Entities.Cards
             Weight = 1;
             Desc = "Heals ■ health (Max: 3)";
             DiceNeeded = 1;
+            act = Action;
         }
 
         public Potion(byte id) : this()
@@ -19,7 +20,7 @@ namespace CardGameTest.Entities.Cards
             ID = id;
         }
 
-        public override void Action(int diceVal)
+        public void Action(int diceVal)
         {
             if (diceVal <= 3)
             {

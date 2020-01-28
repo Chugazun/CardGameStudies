@@ -1,6 +1,8 @@
 ﻿using CardGameTest.Entities;
 using CardGameTest.Entities.Cards;
+using System;
 using System.Collections.Generic;
+using System.Reflection;
 using System.Text;
 
 namespace CardGameTest.Utils
@@ -13,10 +15,21 @@ namespace CardGameTest.Utils
 
         public PlayerBag()
         {
-            TempAddCards();
+            TempAddCardFromDb("Sword");
         }
 
         public void TempAddCards() => handCards.AddRange(new Card[] { new Sword(SetID()), new Potion(SetID()), new Sword(SetID()) });
+        public void TempAddCardFromDb(string name)
+        {
+            //Card card = Game.GetCardFromDb(name);
+            Type t = Type.GetType("CardGameTest.Entities.Cards.Sword");
+            Card card2 = (Card)Activator.CreateInstance(t);
+            //MethodInfo methodInfo = t.GetMethod("Action", new Type[] { typeof(int) }, null);           
+
+            //card.ID = SetID();
+            //AddCard(card);
+            AddCard(card2);
+        }
 
         private byte SetID()
         {
@@ -40,13 +53,13 @@ namespace CardGameTest.Utils
 
             foreach (Card card in handCards)
             {
-                if (!card.Used)
+                if (!card.checkUsed())
                 {
                     sb.Append(handCards.FindIndex(x => x.ID == card.ID) + 1);
                     sb.Append(": ");
                     sb.Append(card.Name);
                     sb.Append(", ");
-                }                
+                }
             }
             return sb.ToString().Substring(0, sb.ToString().Length - 2);
         }

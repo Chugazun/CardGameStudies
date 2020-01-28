@@ -1,17 +1,33 @@
-﻿using System.Text;
+﻿using System;
+using System.Text;
 
 namespace CardGameTest.Entities
 {
-    abstract class Card
+    public class Card
     {
         public byte ID { get; set; }
         public string Name { get; set; }
         public int Weight { get; set; }
         public int DiceNeeded { get; set; }
         public string Desc { get; set; }
-        public bool Used { get; set; }        
+        public bool Used { get; set; }
 
-        public abstract void Action(int diceVal);
+        public Action<int> act;
+
+        //public static void Action(int diceVal)
+        //{
+
+        //}
+
+        public Card()
+        {
+
+        }
+
+        public bool checkUsed()
+        {
+            return Used;
+        }
 
         public override string ToString()
         {
