@@ -15,20 +15,16 @@ namespace CardGameTest.Utils
 
         public PlayerBag()
         {
-            TempAddCardFromDb("Sword");
+            TempAddCardFromDb("SpikedShield");
         }
 
         public void TempAddCards() => handCards.AddRange(new Card[] { new Sword(SetID()), new Potion(SetID()), new Sword(SetID()) });
         public void TempAddCardFromDb(string name)
         {
-            //Card card = Game.GetCardFromDb(name);
-            Type t = Type.GetType("CardGameTest.Entities.Cards.Sword");
-            Card card2 = (Card)Activator.CreateInstance(t);
-            //MethodInfo methodInfo = t.GetMethod("Action", new Type[] { typeof(int) }, null);           
-
-            //card.ID = SetID();
-            //AddCard(card);
-            AddCard(card2);
+            string cardName = Game.GetCardNameFromDb(name);
+            Type cardType = Type.GetType("CardGameTest.Entities.Cards." + cardName);
+            Card card = (Card)Activator.CreateInstance(cardType);
+            AddCard(card);
         }
 
         private byte SetID()
@@ -53,7 +49,7 @@ namespace CardGameTest.Utils
 
             foreach (Card card in handCards)
             {
-                if (!card.checkUsed())
+                if (!card.Used)
                 {
                     sb.Append(handCards.FindIndex(x => x.ID == card.ID) + 1);
                     sb.Append(": ");

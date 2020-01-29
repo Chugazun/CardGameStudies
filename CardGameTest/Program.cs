@@ -12,17 +12,28 @@ namespace ExercisesCore.Test_Program
     {
         static void Main(string[] args)
         {
-            Random rand = new Random();
-
             Game.GameInit(new SeedingService(new cardgamedbContext()));
+            Random rand = new Random();
             Player player = new Player(30);
             Screen sc = new Screen();
-            
+
             Game.StartCombat(player, new Monster("Test", rand.Next(10, 21)));
-            player.PlayerBag.AddCard(new Potion());
-            while (Game.GetCurrentMonster().CurrentHp > 0)
+            player.PlayerBag.AddCard(new WoodenShield());
+            player.PlayerBag.AddCard(new WoodenShield());
+
+            if (Game.Initialized)
             {
-                sc.PrintScreen();
+                while (Game.GetCurrentMonster().CurrentHp > 0)
+                {
+                    sc.PrintScreen();
+
+                }
+            } else
+            {
+                ConsoleColor aux = Console.ForegroundColor;
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("DATABASE UPDATED, SET _dbUpdated IN GAME CLASS TO TRUE");
+                Console.ForegroundColor = aux;
             }
         }
     }

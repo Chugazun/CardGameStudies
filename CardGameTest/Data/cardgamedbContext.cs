@@ -1,5 +1,6 @@
 ﻿using System;
 using CardGameTest.Entities;
+using CardGameTest.Utils;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 
@@ -9,6 +10,7 @@ namespace CardGameTest.Data
     {
 
         public DbSet<Card> Cards { get; set; }
+        public DbSet<CardName> CardsName { get; set; }
 
 
         public cardgamedbContext()

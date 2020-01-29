@@ -11,6 +11,7 @@ namespace CardGameTest.Entities
         public int DiceNeeded { get; set; }
         public string Desc { get; set; }
         public bool Used { get; set; }
+        public int Uses { get; set; }
 
         public Action<int> act;
 
@@ -23,12 +24,7 @@ namespace CardGameTest.Entities
         {
 
         }
-
-        public bool checkUsed()
-        {
-            return Used;
-        }
-
+        
         public override string ToString()
         {
             StringBuilder sb = new StringBuilder();

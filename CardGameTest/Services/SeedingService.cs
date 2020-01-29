@@ -5,6 +5,7 @@ using System.Text;
 using CardGameTest.Data;
 using CardGameTest.Entities;
 using CardGameTest.Entities.Cards;
+using CardGameTest.Utils;
 
 namespace CardGameTest.Services
 {
@@ -20,16 +21,16 @@ namespace CardGameTest.Services
         public bool Seed(bool dbUpdated)
         {
             if (dbUpdated) return true;
-            
-            _context.Cards.Add(new Sword());
+
+            _context.CardsName.AddRange(new CardName("Axe"));
             _context.SaveChanges();
 
             return true;
         }
 
-        public Card FindByName(string name)
+        public string FindByName(string name)
         {
-            return _context.Cards.FirstOrDefault(c => c.Name.Contains(name));
+            return _context.CardsName.FirstOrDefault(c => c.Name.Contains(name)).ToString();
         }
     }
 }

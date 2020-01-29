@@ -9,18 +9,15 @@ namespace CardGameTest.Entities
         {
             Player playerAux = Game.GetCurrentPlayer();
             Monster monsterAux = Game.GetCurrentMonster();
-            Console.WriteLine($"----------------------------------------\nMonster HP: {monsterAux.CurrentHp}/{monsterAux.MaxHp}\nPlayer HP: {playerAux.CurrentHp}/{playerAux.MaxHp}");
+            string playerHp = $"Player HP: {playerAux.CurrentHp}/{playerAux.MaxHp} ";
+            string monsterHp = $"Monster HP: {monsterAux.CurrentHp}/{monsterAux.MaxHp} ";
+            string playerInfo = "";
+            string monsterInfo = "";
+            
+            playerInfo = Game.CheckPlayerInfo(playerInfo);
+            Console.WriteLine($"----------------------------------------\n{monsterHp}  {monsterInfo}\n{playerHp}  {playerInfo}");
             PrintPlayerHand(playerAux);
-            PlayerAction(playerAux);
-        }
-
-        private void PlayerAction(Player player)
-        {
-            //TEMPORARY
-            Console.Write("\n(TEMP!)Select card to play: ");
-
-            Card card = player.PlayerBag.GetCardAt(int.Parse(Console.ReadLine()) - 1);
-            Game.PlayCard(card, 4);
+            Game.PlayerAction();
         }
 
         private void PrintPlayerHand(Player player)

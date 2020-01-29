@@ -4,6 +4,7 @@
     {
         public int MaxHp { get; protected set; }
         public int CurrentHp { get; protected set; }
+        public int Shield { get; set; }
 
         protected Entity(int hp)
         {
@@ -19,6 +20,11 @@
         public void TakeHealing(int healVal)
         {
             CurrentHp += healVal;
+        }
+
+        public void GetShield(int shieldVal)
+        {
+            Shield += shieldVal;
         }
     }
 }
