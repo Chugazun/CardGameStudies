@@ -15,7 +15,9 @@ namespace CardGameTest.Utils
 
         public PlayerBag()
         {
-            TempAddCardFromDb("SpikedShield");
+            TempAddCardFromDb("Sword");
+            TempAddCardFromDb("NatureStaff");
+            TempAddCardFromDb("Dagger");
         }
 
         public void TempAddCards() => handCards.AddRange(new Card[] { new Sword(SetID()), new Potion(SetID()), new Sword(SetID()) });
@@ -43,7 +45,12 @@ namespace CardGameTest.Utils
             return handCards[handPos];
         }
 
-        public override string ToString()
+        public void ResetHandCards()
+        {
+            handCards.ForEach(c => { c.ResetCard(); });
+        }
+
+        public string PlayerHand()
         {
             StringBuilder sb = new StringBuilder();
 

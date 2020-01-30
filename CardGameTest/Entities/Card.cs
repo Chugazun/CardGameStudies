@@ -15,14 +15,19 @@ namespace CardGameTest.Entities
 
         public Action<int> act;
 
-        //public static void Action(int diceVal)
-        //{
+        public virtual void Action(int diceVal)
+        {
 
-        //}
+        }
 
         public Card()
         {
 
+        }
+
+        public virtual void ResetCard()
+        {
+            Used = false;
         }
         
         public override string ToString()

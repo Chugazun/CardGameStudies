@@ -21,10 +21,11 @@ namespace CardGameTest.Entities.Cards
             ID = id;
         }
 
-        public void Action(int diceVal)
+        public override void Action(int diceVal)
         {
             if (Uses > 0)
             {
+                Game.ValidAction();
                 Game.Damage(Game.GetCurrentMonster(), 3);                
                 Uses--;
                 UpdateData();
@@ -36,6 +37,13 @@ namespace CardGameTest.Entities.Cards
         {
             Name = "Dagger (x" + Uses + ")";
             Desc = "Deal 3 Damage (Uses: " + Uses + ")";
+        }
+
+        public override void ResetCard()
+        {
+            base.ResetCard();
+            Uses = 2;
+            UpdateData();
         }
     }
 }

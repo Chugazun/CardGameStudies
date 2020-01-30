@@ -4,18 +4,18 @@ using System.Text;
 
 namespace CardGameTest.Entities.Cards
 {
-    class Sword : Card
+    class NatureStaff : Card
     {
-        public Sword()
+        public NatureStaff()
         {
-            Name = "Sword";
+            Name = "Nature Staff";
             Weight = 2;
-            Desc = "Deals ■ damage";
+            Desc = "Deals ■ Damage, on 6, heals for 2";
             DiceNeeded = 1;
             act = Action;
         }
 
-        public Sword(byte id) : this()
+        public NatureStaff(byte id) : this()
         {
             ID = id;
         }
@@ -24,6 +24,7 @@ namespace CardGameTest.Entities.Cards
         {
             Game.ValidAction();
             Game.Damage(Game.GetCurrentMonster(), diceVal);
+            if (diceVal == 6) Game.Heal(Game.GetCurrentPlayer(), 2);
             Used = true;
         }
     }

@@ -20,10 +20,11 @@ namespace CardGameTest.Entities.Cards
             ID = id;
         }
 
-        public void Action(int diceVal)
+        public override void Action(int diceVal)
         {
             if (diceVal <= 5)
             {
+                Game.ValidAction();
                 if (diceVal % 2 == 0)
                 {
                     Game.Damage(Game.GetCurrentMonster(), diceVal);                    

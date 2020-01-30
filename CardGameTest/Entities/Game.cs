@@ -10,7 +10,7 @@ namespace CardGameTest.Entities
     {
         static private Player _player;
         static private Monster _monster;
-        static private bool _dbUpdated = true;
+        static private bool _dbUpdated = true, isValidAction = false;
         static private SeedingService _seedingService;
         static private int auxPShieldValue = 0;
         public static bool Initialized { get; set; }
@@ -19,20 +19,65 @@ namespace CardGameTest.Entities
         {
             _player = player;
             _monster = monster;
+            NewTurn();
         }
 
-        public static void PlayCard(Card card, int diceVal)
+        public static void PlayCard(Card card, int diceVal, int dicePos)
         {
             if (!card.Used) card.act(diceVal);
+            if (isValidAction) UseDie(dicePos);
+        }
+
+        private static void UseDie(int pos)
+        {
+            _player.Dice.RemoveAt(pos);
+            isValidAction = false;
         }
 
         public static void PlayerAction()
         {
-            //TEMPORARY
+            bool checkSelection = true;
+
+            do
+            {
+                //TEMPORARY
+                Console.Write("\nSelected desired action: ");
+                int selectedAction = int.Parse(Console.ReadLine());
+                checkSelection = VerifySelection(selectedAction);
+            } while (!checkSelection);
+            Console.Clear();
+        }
+
+        public static void NewTurn()
+        {
+            _player.Dice = RollDice(_player.DiceQuant);
+            _player.PlayerBag.ResetHandCards();
+        }
+
+        public static List<int> RollDice(int diceQuant)
+        {
+            List<int> aux = new List<int>();
+            Random rand = new Random();
+
+            for (int i = 0; i < diceQuant; i++)
+            {
+                aux.Add(rand.Next(1, 7));
+            }
+
+            return aux;
+        }
+
+        private static void AttackAction()
+        {
             Console.Write("\n(TEMP!)Select card to play: ");
 
-            Card card = _player.PlayerBag.GetCardAt(int.Parse(Console.ReadLine()) - 1);
-            PlayCard(card, 3);
+            Card selectedCard = _player.PlayerBag.GetCardAt(int.Parse(Console.ReadLine()) - 1);
+
+            Console.Write("\n(TEMP!)Select desired die: ");
+            int dicePos = int.Parse(Console.ReadLine()) - 1;
+            int selectedDie = _player.Dice[dicePos];
+
+            PlayCard(selectedCard, selectedDie, dicePos);
         }
 
         public static void Damage(Entity target, int dmgVal) => target.TakeDamage(dmgVal);
@@ -47,7 +92,7 @@ namespace CardGameTest.Entities
             StatusControl status = new StatusControl(_player);
 
             if (status.HasAny())
-            {                
+            {
                 if (_player.Shield > 0)
                 {
                     if (!playerStatus.Contains("Shield"))
@@ -60,8 +105,9 @@ namespace CardGameTest.Entities
                         playerStatus = Regex.Replace(playerStatus, "Shield: " + auxPShieldValue, "Shield: " + _player.Shield);
                         auxPShieldValue = _player.Shield;
                     }
-                }               
-            } else
+                }
+            }
+            else
             {
                 return "";
             }
@@ -92,6 +138,27 @@ namespace CardGameTest.Entities
             return _seedingService.FindByName(name);
         }
 
+        public static void ValidAction()
+        {
+            isValidAction = true;
+        }
 
+        private static bool VerifySelection(int selection)
+        {
+            switch (selection)
+            {
+                case 1:
+                    AttackAction();
+                    break;
+
+                case 2:
+                    NewTurn();
+                    break;
+
+                default:
+                    return false;
+            }
+            return true;
+        }
     }
 }

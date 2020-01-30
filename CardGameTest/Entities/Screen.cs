@@ -13,10 +13,12 @@ namespace CardGameTest.Entities
             string monsterHp = $"Monster HP: {monsterAux.CurrentHp}/{monsterAux.MaxHp} ";
             string playerInfo = "";
             string monsterInfo = "";
-            
+
             playerInfo = Game.CheckPlayerInfo(playerInfo);
             Console.WriteLine($"----------------------------------------\n{monsterHp}  {monsterInfo}\n{playerHp}  {playerInfo}");
             PrintPlayerHand(playerAux);
+            PrintPlayerDice(playerAux);
+            PrintMenu();
             Game.PlayerAction();
         }
 
@@ -24,8 +26,23 @@ namespace CardGameTest.Entities
         {
             ConsoleColor aux = Console.ForegroundColor;
             Console.ForegroundColor = ConsoleColor.Yellow;
-            Console.WriteLine($"\nPlayer Hand: {{{player.PlayerBag}}}");
+            Console.WriteLine($"\nPlayer Hand: {{{player.PlayerBag.PlayerHand()}}}");
             Console.ForegroundColor = aux;
+        }
+
+        private void PrintPlayerDice(Player player)
+        {
+            ConsoleColor aux = Console.ForegroundColor;
+            Console.ForegroundColor = ConsoleColor.Cyan;
+            Console.WriteLine($"\nAvailable Dice: {{{player.PlayerDice()}}}");
+            Console.ForegroundColor = aux;
+        }
+
+        private void PrintMenu()
+        {
+            Console.WriteLine("\nActions");
+            Console.WriteLine("1 - Attack.\n" +
+                              "2 - End turn.");
         }
     }
 }
