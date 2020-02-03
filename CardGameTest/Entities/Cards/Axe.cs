@@ -8,7 +8,7 @@ namespace CardGameTest.Entities.Cards
     {
         public Axe()
         {
-            Name = "Axe";
+            Name = "Axe (<=4)";
             Weight = 2;
             Desc = "Deals 2x ■ Damage (Max 4)";
             DiceNeeded = 1;

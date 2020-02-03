@@ -13,6 +13,7 @@ namespace CardGameTest.Entities
         static private bool _dbUpdated = true, isValidAction = false;
         static private SeedingService _seedingService;
         static private int auxPShieldValue = 0;
+        static private int? dicePos;
         public static bool Initialized { get; set; }
 
         public static void StartCombat(Player player, Monster monster)
@@ -36,8 +37,7 @@ namespace CardGameTest.Entities
 
         public static void PlayerAction()
         {
-            bool checkSelection = true;
-
+            bool checkSelection;
             do
             {
                 //TEMPORARY
@@ -72,12 +72,13 @@ namespace CardGameTest.Entities
             Console.Write("\n(TEMP!)Select card to play: ");
 
             Card selectedCard = _player.PlayerBag.GetCardAt(int.Parse(Console.ReadLine()) - 1);
+            Console.WriteLine("\n" + selectedCard);
 
             Console.Write("\n(TEMP!)Select desired die: ");
-            int dicePos = int.Parse(Console.ReadLine()) - 1;
-            int selectedDie = _player.Dice[dicePos];
+            dicePos = int.Parse(Console.ReadLine()) - 1;
+            int selectedDie = _player.Dice[dicePos.Value];
 
-            PlayCard(selectedCard, selectedDie, dicePos);
+            PlayCard(selectedCard, selectedDie, dicePos.Value);
         }
 
         public static void Damage(Entity target, int dmgVal) => target.TakeDamage(dmgVal);
@@ -86,9 +87,36 @@ namespace CardGameTest.Entities
 
         public static void GainShield(Entity target, int shieldVal) => target.GetShield(shieldVal);
 
+        public static void CreateDie(Entity target, int diceValue) => target.Dice.Add(diceValue);
+
+        public static void ChangeDiceValue(Entity target, int newValue)
+        {
+            if (newValue <= 6)
+            {
+                target.Dice[dicePos.Value] = newValue;
+            }
+            else
+            {
+                target.Dice[dicePos.Value] = 6;
+                CreateDie(target, newValue - 6);
+            }
+        }
+
+        public static void SplitDiceValue(Entity target, int diceVal)
+        {
+            if (diceVal == 1)
+            {
+                CreateDie(target, 1);
+                return;
+            }
+            Random rand = new Random();            
+            int aux = diceVal - rand.Next(1, diceVal);
+            target.Dice[dicePos.Value] = aux;
+            CreateDie(target, diceVal - aux);
+        }
+
         public static string CheckPlayerInfo(string playerStatus)
         {
-
             StatusControl status = new StatusControl(_player);
 
             if (status.HasAny())

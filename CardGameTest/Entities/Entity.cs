@@ -1,10 +1,13 @@
-﻿namespace CardGameTest.Entities
+﻿using System.Collections.Generic;
+
+namespace CardGameTest.Entities
 {
     abstract class Entity
     {
         public int MaxHp { get; protected set; }
         public int CurrentHp { get; protected set; }
         public int Shield { get; set; }
+        public List<int> Dice { get; set; } = new List<int>();
 
         protected Entity(int hp)
         {

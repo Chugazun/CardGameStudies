@@ -7,11 +7,8 @@ using Microsoft.EntityFrameworkCore.Metadata;
 namespace CardGameTest.Data
 {
     public partial class cardgamedbContext : DbContext
-    {
-
-        public DbSet<Card> Cards { get; set; }
+    {        
         public DbSet<CardName> CardsName { get; set; }
-
 
         public cardgamedbContext()
         {

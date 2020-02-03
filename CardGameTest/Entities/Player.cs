@@ -9,8 +9,7 @@ namespace CardGameTest.Entities
         public int Gold { get; private set; }
         public int Level { get; private set; }
         public int Exp { get; set; }
-        public PlayerBag PlayerBag { get; set; } = new PlayerBag();
-        public List<int> Dice { get; set; } = new List<int>();
+        public PlayerBag PlayerBag { get; set; } = new PlayerBag();        
         public int DiceQuant { get; private set; }
 
         public Player(int hp) : base(hp)
@@ -25,7 +24,7 @@ namespace CardGameTest.Entities
 
             for (int i = 0; i < Dice.Count; i++)
             {
-                sb.Append("#"+(i + 1));
+                sb.Append("#D"+(i + 1));
                 sb.Append(": ");
                 sb.Append(Dice[i]);
                 sb.Append(", ");

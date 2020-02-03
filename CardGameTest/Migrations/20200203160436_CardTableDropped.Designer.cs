@@ -2,14 +2,16 @@
 using CardGameTest.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace CardGameTest.Migrations
 {
     [DbContext(typeof(cardgamedbContext))]
-    partial class cardgamedbContextModelSnapshot : ModelSnapshot
+    [Migration("20200203160436_CardTableDropped")]
+    partial class CardTableDropped
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

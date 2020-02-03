@@ -33,7 +33,7 @@ namespace CardGameTest.Entities
         public override string ToString()
         {
             StringBuilder sb = new StringBuilder();
-            sb.AppendLine(Name);
+            sb.AppendLine(Name.Contains("(")? Name.Substring(0, Name.IndexOf("(")) : Name);
             sb.Append("Dice Needed: ");
             sb.AppendLine(DiceNeeded.ToString());
             sb.Append("Effect: ");

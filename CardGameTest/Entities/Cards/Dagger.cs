@@ -44,6 +44,6 @@ namespace CardGameTest.Entities.Cards
             base.ResetCard();
             Uses = 2;
             UpdateData();
-        }
+        }        
     }
 }

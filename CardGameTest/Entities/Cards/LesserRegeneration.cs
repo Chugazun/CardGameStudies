@@ -4,30 +4,29 @@ using System.Text;
 
 namespace CardGameTest.Entities.Cards
 {
-    class Potion : Card
+    class LesserRegeneration : Card
     {
-        public Potion()
+        public LesserRegeneration()
         {
-            Name = "Potion (E)";
+            Name = "Lesser Regeneration (O)(R)";
             Weight = 1;
-            Desc = "Heals for 2 (Even Only)";
+            Desc = "■: Heals for 1 (Odd Only) (Reusable)";
             DiceNeeded = 1;
             act = Action;
         }
 
-        public Potion(byte id) : this()
+        public LesserRegeneration(byte id) : this()
         {
             ID = id;
         }
 
         public override void Action(int diceVal)
         {
-            if (diceVal % 2 == 0)
+            if (diceVal % 2 != 0)
             {
                 Game.ValidAction();
-                Game.Heal(Game.GetCurrentPlayer(), 2);
-                Used = true;
-            }            
+                Game.Heal(Game.GetCurrentPlayer(), 1);
+            }
         }
     }
 }
