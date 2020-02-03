@@ -34,6 +34,7 @@ namespace CardGameTest.Entities.Cards
             {
                 aux += diceVal;
                 Game.ChangeDiceValue(Game.GetCurrentPlayer(), aux);
+                Game.CardsUsed++;
                 Used = true;
             }
         }

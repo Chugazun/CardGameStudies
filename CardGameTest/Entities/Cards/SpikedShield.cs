@@ -32,6 +32,7 @@ namespace CardGameTest.Entities.Cards
                 {
                     Game.GainShield(Game.GetCurrentPlayer(), diceVal);
                 }
+                Game.CardsUsed++;
                 Used = true;
             }
         }

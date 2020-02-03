@@ -25,7 +25,8 @@ namespace CardGameTest.Entities.Cards
             if (diceVal <= 3)
             {
                 Game.ValidAction();
-                Game.GainShield(Game.GetCurrentPlayer(), diceVal);                
+                Game.GainShield(Game.GetCurrentPlayer(), diceVal);
+                Game.CardsUsed++;
                 Used = true;
             }
         }

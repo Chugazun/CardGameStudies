@@ -25,6 +25,7 @@ namespace CardGameTest.Entities.Cards
             Game.ValidAction();
             Game.Damage(Game.GetCurrentMonster(), diceVal);
             if (diceVal == 6) Game.Heal(Game.GetCurrentPlayer(), 2);
+            Game.CardsUsed++;
             Used = true;
         }
     }

@@ -2,7 +2,6 @@
 using CardGameTest.Entities.Cards;
 using System;
 using System.Collections.Generic;
-using System.Reflection;
 using System.Text;
 
 namespace CardGameTest.Utils
@@ -43,7 +42,7 @@ namespace CardGameTest.Utils
         public Card GetCardAt(int handPos)
         {
             return handCards[handPos];
-        }
+        }        
 
         public void ResetHandCards()
         {

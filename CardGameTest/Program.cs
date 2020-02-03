@@ -18,7 +18,7 @@ namespace ExercisesCore.Test_Program
             Screen sc = new Screen();
 
             Game.StartCombat(player, new Monster("Test", rand.Next(10, 21)));
-            player.PlayerBag.AddCard(new Spanner());
+            player.PlayerBag.AddCard(new Execute());
             Game.Damage(player, 2);
 
             if (Game.Initialized)
@@ -28,7 +28,8 @@ namespace ExercisesCore.Test_Program
                     sc.PrintScreen();
 
                 }
-            } else
+            }
+            else
             {
                 ConsoleColor aux = Console.ForegroundColor;
                 Console.ForegroundColor = ConsoleColor.Red;

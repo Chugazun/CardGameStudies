@@ -29,8 +29,13 @@ namespace CardGameTest.Entities.Cards
                 Game.Damage(Game.GetCurrentMonster(), 3);                
                 Uses--;
                 UpdateData();
+                Game.CardsUsed++;
             }
-            if (Uses <= 0) Used = true;
+            if (Uses <= 0)
+            {
+                Game.CardsUsed++;
+                Used = true;
+            }
         }
 
         public void UpdateData()

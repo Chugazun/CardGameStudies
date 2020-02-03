@@ -23,6 +23,7 @@ namespace CardGameTest.Entities.Cards
         public override void Action(int diceVal)
         {            
             Game.CreateDie(Game.GetCurrentPlayer(), diceVal);
+            Game.CardsUsed++;
             Used = true;
         }
     }

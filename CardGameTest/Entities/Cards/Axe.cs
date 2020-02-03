@@ -26,6 +26,7 @@ namespace CardGameTest.Entities.Cards
             {
                 Game.ValidAction();
                 Game.Damage(Game.GetCurrentMonster(), diceVal * 2);
+                Game.CardsUsed++;
                 Used = true;
             }            
         }

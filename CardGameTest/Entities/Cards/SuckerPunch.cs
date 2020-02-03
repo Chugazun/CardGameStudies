@@ -4,25 +4,27 @@ using System.Text;
 
 namespace CardGameTest.Entities.Cards
 {
-    class Lockpick : Card
+    class SuckerPunch : Card
     {
-        public Lockpick()
+        public SuckerPunch()
         {
-            Name = "Lockpick";
+            Name = "Sucker Punch";
             Weight = 1;
-            Desc = "■: Split Die in Two";
+            Desc = "■: Deals 1 Damage. Get a new Die";
             DiceNeeded = 1;
             act = Action;
         }
 
-        public Lockpick(byte id) : this()
+        public SuckerPunch(byte id) : this()
         {
             ID = id;
         }
 
         public override void Action(int diceVal)
         {            
-            Game.SplitDiceValue(Game.GetCurrentPlayer(), diceVal);
+            Game.Damage(Game.GetCurrentMonster(), 1);
+            Random rand = new Random();
+            Game.ChangeDiceValue(Game.GetCurrentPlayer(), rand.Next(1, 7));
             Game.CardsUsed++;
             Used = true;
         }

@@ -15,6 +15,7 @@ namespace CardGameTest.Entities
         static private int auxPShieldValue = 0;
         static private int? dicePos;
         public static bool Initialized { get; set; }
+        public static int CardsUsed { get; set; }
 
         public static void StartCombat(Player player, Monster monster)
         {
@@ -51,6 +52,7 @@ namespace CardGameTest.Entities
         public static void NewTurn()
         {
             _player.Dice = RollDice(_player.DiceQuant);
+            Game.CardsUsed = 0;
             _player.PlayerBag.ResetHandCards();
         }
 
@@ -168,8 +170,8 @@ namespace CardGameTest.Entities
 
         public static void ValidAction()
         {
-            isValidAction = true;
-        }
+            isValidAction = true;            
+        }      
 
         private static bool VerifySelection(int selection)
         {

@@ -35,6 +35,7 @@ namespace CardGameTest.Entities.Cards
             {
                 aux += diceVal;
                 Game.Damage(Game.GetCurrentMonster(), aux);
+                Game.CardsUsed++;
                 Used = true;
             }
         }

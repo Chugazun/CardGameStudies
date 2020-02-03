@@ -26,6 +26,7 @@ namespace CardGameTest.Entities.Cards
             {
                 Game.ValidAction();
                 Game.Heal(Game.GetCurrentPlayer(), 2);
+                Game.CardsUsed++;
                 Used = true;
             }            
         }
