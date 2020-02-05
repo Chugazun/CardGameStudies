@@ -5,17 +5,18 @@ namespace CardGameTest.Entities
 {
     class Screen
     {
+        string playerInfo = "";
         public void PrintScreen()
         {
             Player playerAux = Game.GetCurrentPlayer();
             Monster monsterAux = Game.GetCurrentMonster();
             string playerHp = $"Player HP: {playerAux.CurrentHp}/{playerAux.MaxHp} ";
             string monsterHp = $"Monster HP: {monsterAux.CurrentHp}/{monsterAux.MaxHp} ";
-            string playerInfo = "";
+            
             string monsterInfo = "";
 
             playerInfo = Game.CheckPlayerInfo(playerInfo);
-            Console.WriteLine($"----------------------------------------\n{monsterHp}  {monsterInfo}\n{playerHp}  {playerInfo}");
+            Console.WriteLine($"----------------------------------------\n{monsterHp}  {monsterInfo}\n{playerHp}  {{{playerInfo}}}");
             PrintPlayerHand(playerAux);
             PrintPlayerDice(playerAux);
             PrintMenu();

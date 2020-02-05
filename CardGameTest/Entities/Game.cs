@@ -10,6 +10,7 @@ namespace CardGameTest.Entities
     {
         static private Player _player;
         static private Monster _monster;
+        static private StatusControl playerStatusC;
         static private bool _dbUpdated = true, isValidAction = false;
         static private SeedingService _seedingService;
         static private int auxPShieldValue = 0;
@@ -20,6 +21,7 @@ namespace CardGameTest.Entities
         public static void StartCombat(Player player, Monster monster)
         {
             _player = player;
+            playerStatusC = new StatusControl(_player);
             _monster = monster;
             NewTurn();
         }
@@ -53,7 +55,7 @@ namespace CardGameTest.Entities
         {
             _player.Dice = RollDice(_player.DiceQuant);
             Game.CardsUsed = 0;
-            _player.PlayerBag.ResetHandCards();
+            _player.PlayerBag.ResetHandCards();                     
         }
 
         public static List<int> RollDice(int diceQuant)
@@ -87,7 +89,7 @@ namespace CardGameTest.Entities
 
         public static void Heal(Entity target, int healVal) => target.TakeHealing(healVal);
 
-        public static void GainShield(Entity target, int shieldVal) => target.GetShield(shieldVal);
+        public static void GainShield(Entity target, int shieldVal) => target.GainShield(shieldVal);
 
         public static void CreateDie(Entity target, int diceValue) => target.Dice.Add(diceValue);
 
@@ -111,7 +113,7 @@ namespace CardGameTest.Entities
                 CreateDie(target, 1);
                 return;
             }
-            Random rand = new Random();            
+            Random rand = new Random();
             int aux = diceVal - rand.Next(1, diceVal);
             target.Dice[dicePos.Value] = aux;
             CreateDie(target, diceVal - aux);
@@ -119,30 +121,51 @@ namespace CardGameTest.Entities
 
         public static string CheckPlayerInfo(string playerStatus)
         {
-            StatusControl status = new StatusControl(_player);
+            
 
-            if (status.HasAny())
+            if (playerStatusC.HasAny())
             {
-                if (_player.Shield > 0)
-                {
-                    if (!playerStatus.Contains("Shield"))
-                    {
-                        playerStatus = string.Concat(playerStatus, $"Shield: {_player.Shield}, ");
-                        auxPShieldValue = _player.Shield;
-                    }
-                    else
-                    {
-                        playerStatus = Regex.Replace(playerStatus, "Shield: " + auxPShieldValue, "Shield: " + _player.Shield);
-                        auxPShieldValue = _player.Shield;
-                    }
-                }
+                //if (_player.Status.Shield > 0)
+                //{
+                //    if (!playerStatus.Contains("Shield"))
+                //    {
+                //        playerStatus = string.Concat(playerStatus, $"Shield: {_player.Status.Shield}   ");
+                //        auxPShieldValue = _player.Status.Shield;
+                //    }
+                //    else
+                //    {
+                //        playerStatus = Regex.Replace(playerStatus, "Shield: " + auxPShieldValue, "Shield: " + _player.Status.Shield);
+                //        auxPShieldValue = _player.Status.Shield;
+                //    }                    
+                //}
+                //else if (_player.Status.Shield <= 0 && playerStatus.Contains("Shield"))
+                //{
+                //    playerStatus = Regex.Replace(playerStatus, "Shield: " + auxPShieldValue, "");
+                //    auxPShieldValue = 0;
+                //}
+                //if (_player.Status.Poison > 0)
+                //{
+                //    if (!playerStatus.Contains("Poison"))
+                //    {
+                //        playerStatus = string.Concat(playerStatus, $"Poison: {_player.Status.Poison} ");                        
+                //    }
+                //    else
+                //    {
+                //        //playerStatus = Regex.Replace(playerStatus, "Shield: " + auxPShieldValue, "Shield: " + _player.Shield);                        
+                //    }
+                //}
+                //else if (_player.Status.Poison <= 0 && playerStatus.Contains("Poison"))
+                //{
+                //    playerStatus.Remove(playerStatus.IndexOf("Poison: " + _player.Status.Poison));
+                //}
+                playerStatus = playerStatusC.GetStatusInfo(playerStatus);
+                Console.WriteLine(_player.Status.Shield);
             }
             else
             {
                 return "";
-            }
-
-            return "{ " + playerStatus.Substring(0, playerStatus.Length - 2) + " }";
+            }            
+            return playerStatus.Trim();
         }
 
         public static Monster GetCurrentMonster()
@@ -170,8 +193,8 @@ namespace CardGameTest.Entities
 
         public static void ValidAction()
         {
-            isValidAction = true;            
-        }      
+            isValidAction = true;
+        }
 
         private static bool VerifySelection(int selection)
         {
@@ -181,8 +204,8 @@ namespace CardGameTest.Entities
                     AttackAction();
                     break;
 
-                case 2:
-                    NewTurn();
+                case 2:                    
+                    NewTurn();                    
                     break;
 
                 default:
