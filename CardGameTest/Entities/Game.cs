@@ -11,9 +11,9 @@ namespace CardGameTest.Entities
         static private Player _player;
         static private Monster _monster;
         static private StatusControl playerStatusC;
+        static private Screen _screen;
         static private bool _dbUpdated = true, isValidAction = false;
         static private SeedingService _seedingService;
-        static private int auxPShieldValue = 0;
         static private int? dicePos;
         public static bool Initialized { get; set; }
         public static int CardsUsed { get; set; }
@@ -23,7 +23,12 @@ namespace CardGameTest.Entities
             _player = player;
             playerStatusC = new StatusControl(_player);
             _monster = monster;
-            NewTurn();
+            _player.Status.Poison = 2;
+            _player.Status.Lock = 2;
+            _player.Status.Burn = 2;
+            ResetPlayer();
+            playerStatusC.HasAny();
+            playerStatusC.ActivateStatus();            
         }
 
         public static void PlayCard(Card card, int diceVal, int dicePos)
@@ -44,43 +49,68 @@ namespace CardGameTest.Entities
             do
             {
                 //TEMPORARY
-                Console.Write("\nSelected desired action: ");
-                int selectedAction = int.Parse(Console.ReadLine());
+                int selectedAction = _screen.RequestPlayerAction();
                 checkSelection = VerifySelection(selectedAction);
             } while (!checkSelection);
+            //Console.Clear();            
+        }
+
+        public static void UpdateScreen()
+        {
             Console.Clear();
+            _screen.PrintScreen(GetCurrentPlayer(), GetCurrentMonster());
         }
 
         public static void NewTurn()
         {
-            _player.Dice = RollDice(_player.DiceQuant);
-            Game.CardsUsed = 0;
-            _player.PlayerBag.ResetHandCards();                     
+            //playerStatusC.CheckStatus();                    
+            ResetPlayer();
+            playerStatusC.HasAny();
+            playerStatusC.ActivateStatus();
+            //UpdateScreen();
         }
 
-        public static List<int> RollDice(int diceQuant)
+        private static void ResetPlayer()
         {
-            List<int> aux = new List<int>();
+            _player.Dice = RollDice(_player.DiceQuant);
+            Game.CardsUsed = 0;
+            _player.PlayerBag.ResetHandCards();
+        }
+
+        public static List<Die> RollDice(int diceQuant)
+        {
+            List<Die> aux = new List<Die>();
             Random rand = new Random();
 
             for (int i = 0; i < diceQuant; i++)
             {
-                aux.Add(rand.Next(1, 7));
-            }
+                aux.Add(new Die(rand.Next(1, 7)));
+            }            
 
             return aux;
         }
 
         private static void AttackAction()
         {
-            Console.Write("\n(TEMP!)Select card to play: ");
+            Card selectedCard;
+            do
+            {
+                Console.Write("\n(TEMP!)Select card to play: ");
+                int handPos = int.Parse(Console.ReadLine()) - 1;
 
-            Card selectedCard = _player.PlayerBag.GetCardAt(int.Parse(Console.ReadLine()) - 1);
+                selectedCard = _player.PlayerBag.GetCardAt(handPos).Used ? null : _player.PlayerBag.GetCardAt(handPos);
+            } while (selectedCard == null);
+
             Console.WriteLine("\n" + selectedCard);
 
-            Console.Write("\n(TEMP!)Select desired die: ");
-            dicePos = int.Parse(Console.ReadLine()) - 1;
-            int selectedDie = _player.Dice[dicePos.Value];
+            int selectedDie;
+            do
+            {
+                Console.Write("\n(TEMP!)Select desired die: ");
+                dicePos = int.Parse(Console.ReadLine()) - 1;
+
+                selectedDie = _player.Dice[dicePos.Value].IsLocked ? 0 : _player.Dice[dicePos.Value].GetValue(_player);
+            } while (selectedDie == 0);           
 
             PlayCard(selectedCard, selectedDie, dicePos.Value);
         }
@@ -91,17 +121,17 @@ namespace CardGameTest.Entities
 
         public static void GainShield(Entity target, int shieldVal) => target.GainShield(shieldVal);
 
-        public static void CreateDie(Entity target, int diceValue) => target.Dice.Add(diceValue);
+        public static void CreateDie(Entity target, int diceValue) => target.Dice.Add(new Die(diceValue));
 
         public static void ChangeDiceValue(Entity target, int newValue)
         {
             if (newValue <= 6)
             {
-                target.Dice[dicePos.Value] = newValue;
+                target.Dice[dicePos.Value].Value = newValue;
             }
             else
             {
-                target.Dice[dicePos.Value] = 6;
+                target.Dice[dicePos.Value].Value = 6;
                 CreateDie(target, newValue - 6);
             }
         }
@@ -115,56 +145,55 @@ namespace CardGameTest.Entities
             }
             Random rand = new Random();
             int aux = diceVal - rand.Next(1, diceVal);
-            target.Dice[dicePos.Value] = aux;
+            target.Dice[dicePos.Value].Value = aux;
             CreateDie(target, diceVal - aux);
         }
 
         public static string CheckPlayerInfo(string playerStatus)
         {
-            
+            //if (playerStatusC.HasAny())
+            //{
 
-            if (playerStatusC.HasAny())
-            {
-                //if (_player.Status.Shield > 0)
-                //{
-                //    if (!playerStatus.Contains("Shield"))
-                //    {
-                //        playerStatus = string.Concat(playerStatus, $"Shield: {_player.Status.Shield}   ");
-                //        auxPShieldValue = _player.Status.Shield;
-                //    }
-                //    else
-                //    {
-                //        playerStatus = Regex.Replace(playerStatus, "Shield: " + auxPShieldValue, "Shield: " + _player.Status.Shield);
-                //        auxPShieldValue = _player.Status.Shield;
-                //    }                    
-                //}
-                //else if (_player.Status.Shield <= 0 && playerStatus.Contains("Shield"))
-                //{
-                //    playerStatus = Regex.Replace(playerStatus, "Shield: " + auxPShieldValue, "");
-                //    auxPShieldValue = 0;
-                //}
-                //if (_player.Status.Poison > 0)
-                //{
-                //    if (!playerStatus.Contains("Poison"))
-                //    {
-                //        playerStatus = string.Concat(playerStatus, $"Poison: {_player.Status.Poison} ");                        
-                //    }
-                //    else
-                //    {
-                //        //playerStatus = Regex.Replace(playerStatus, "Shield: " + auxPShieldValue, "Shield: " + _player.Shield);                        
-                //    }
-                //}
-                //else if (_player.Status.Poison <= 0 && playerStatus.Contains("Poison"))
-                //{
-                //    playerStatus.Remove(playerStatus.IndexOf("Poison: " + _player.Status.Poison));
-                //}
-                playerStatus = playerStatusC.GetStatusInfo(playerStatus);
-                Console.WriteLine(_player.Status.Shield);
-            }
-            else
-            {
-                return "";
-            }            
+            //    //if (_player.Status.Shield > 0)
+            //    //{
+            //    //    if (!playerStatus.Contains("Shield"))
+            //    //    {
+            //    //        playerStatus = string.Concat(playerStatus, $"Shield: {_player.Status.Shield}   ");
+            //    //        auxPShieldValue = _player.Status.Shield;
+            //    //    }
+            //    //    else
+            //    //    {
+            //    //        playerStatus = Regex.Replace(playerStatus, "Shield: " + auxPShieldValue, "Shield: " + _player.Status.Shield);
+            //    //        auxPShieldValue = _player.Status.Shield;
+            //    //    }                    
+            //    //}
+            //    //else if (_player.Status.Shield <= 0 && playerStatus.Contains("Shield"))
+            //    //{
+            //    //    playerStatus = Regex.Replace(playerStatus, "Shield: " + auxPShieldValue, "");
+            //    //    auxPShieldValue = 0;
+            //    //}
+            //    //if (_player.Status.Poison > 0)
+            //    //{
+            //    //    if (!playerStatus.Contains("Poison"))
+            //    //    {
+            //    //        playerStatus = string.Concat(playerStatus, $"Poison: {_player.Status.Poison} ");                        
+            //    //    }
+            //    //    else
+            //    //    {
+            //    //        //playerStatus = Regex.Replace(playerStatus, "Shield: " + auxPShieldValue, "Shield: " + _player.Shield);                        
+            //    //    }
+            //    //}
+            //    //else if (_player.Status.Poison <= 0 && playerStatus.Contains("Poison"))
+            //    //{
+            //    //    playerStatus.Remove(playerStatus.IndexOf("Poison: " + _player.Status.Poison));
+            //    //}
+
+            //}
+            //else
+            //{
+            //    return "";
+            //}
+            playerStatus = playerStatusC.GetStatusInfo(playerStatus);
             return playerStatus.Trim();
         }
 
@@ -178,8 +207,9 @@ namespace CardGameTest.Entities
             return _player;
         }
 
-        public static void GameInit(SeedingService seedingService)
+        public static void GameInit(SeedingService seedingService, Screen screen)
         {
+            _screen = screen;
             Initialized = _dbUpdated;
             _seedingService = seedingService;
             _dbUpdated = _seedingService.Seed(_dbUpdated);
@@ -204,8 +234,8 @@ namespace CardGameTest.Entities
                     AttackAction();
                     break;
 
-                case 2:                    
-                    NewTurn();                    
+                case 2:
+                    NewTurn();
                     break;
 
                 default:

@@ -6,21 +6,18 @@ namespace CardGameTest.Entities
     class Screen
     {
         string playerInfo = "";
-        public void PrintScreen()
-        {
-            Player playerAux = Game.GetCurrentPlayer();
-            Monster monsterAux = Game.GetCurrentMonster();
-            string playerHp = $"Player HP: {playerAux.CurrentHp}/{playerAux.MaxHp} ";
-            string monsterHp = $"Monster HP: {monsterAux.CurrentHp}/{monsterAux.MaxHp} ";
+        public void PrintScreen(Player currentPlayer, Monster currentMonster)
+        {   
+            string playerHp = $"Player HP: {currentPlayer.CurrentHp}/{currentPlayer.MaxHp} ";
+            string monsterHp = $"Monster HP: {currentMonster.CurrentHp}/{currentMonster.MaxHp} ";
             
             string monsterInfo = "";
 
             playerInfo = Game.CheckPlayerInfo(playerInfo);
             Console.WriteLine($"----------------------------------------\n{monsterHp}  {monsterInfo}\n{playerHp}  {{{playerInfo}}}");
-            PrintPlayerHand(playerAux);
-            PrintPlayerDice(playerAux);
-            PrintMenu();
-            Game.PlayerAction();
+            PrintPlayerHand(currentPlayer);
+            PrintPlayerDice(currentPlayer);
+            PrintMenu();            
         }
 
         private void PrintPlayerHand(Player player)
@@ -37,6 +34,13 @@ namespace CardGameTest.Entities
             Console.ForegroundColor = ConsoleColor.Cyan;
             Console.WriteLine($"\nAvailable Dice: {{{player.PlayerDice()}}}");
             Console.ForegroundColor = aux;
+        }
+
+        public int RequestPlayerAction()
+        {
+            //TEMPORARY
+            Console.Write("\nSelected desired action: ");
+            return int.Parse(Console.ReadLine());
         }
 
         private void PrintMenu()

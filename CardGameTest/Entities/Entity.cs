@@ -7,7 +7,8 @@ namespace CardGameTest.Entities
     {
         public int MaxHp { get; protected set; }
         public int CurrentHp { get; protected set; }        
-        public List<int> Dice { get; set; } = new List<int>();
+        public List<int> DiceOld { get; set; } = new List<int>();
+        public List<Die> Dice { get; set; } = new List<Die>();
         public StatusSheet Status { get; set; }
 
         protected Entity(int hp)

@@ -12,10 +12,10 @@ namespace ExercisesCore.Test_Program
     {
         static void Main(string[] args)
         {
-            Game.GameInit(new SeedingService(new cardgamedbContext()));
-            Random rand = new Random();
-            Player player = new Player(30);
             Screen sc = new Screen();
+            Game.GameInit(new SeedingService(new cardgamedbContext()), sc);
+            Random rand = new Random();
+            Player player = new Player(30);            
 
             Game.StartCombat(player, new Monster("Test", rand.Next(10, 21)));
             player.PlayerBag.AddCard(new Execute());
@@ -25,8 +25,8 @@ namespace ExercisesCore.Test_Program
             {
                 while (Game.GetCurrentMonster().CurrentHp > 0)
                 {
-                    sc.PrintScreen();
-
+                    Game.UpdateScreen();
+                    Game.PlayerAction();
                 }
             }
             else

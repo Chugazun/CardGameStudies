@@ -30,7 +30,7 @@ namespace CardGameTest.Entities
                 sb.Append(", ");
             }
 
-            return sb.ToString().Substring(0, sb.ToString().Length - 2);
+            return sb.ToString()[0..^2];
         }
     }
 }
