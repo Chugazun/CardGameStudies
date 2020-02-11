@@ -4,14 +4,14 @@ using System.Text;
 namespace CardGameTest.Entities
 {
     public class Card
-    {
+    {        
         public byte ID { get; set; }
         public string Name { get; set; }
         public int Weight { get; set; }
         public int DiceNeeded { get; set; }
         public string Desc { get; set; }
         public bool Used { get; set; }
-        public int Uses { get; set; }
+        public int Uses { get; set; }        
 
         public Action<int> act;
 

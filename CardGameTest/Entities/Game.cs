@@ -24,11 +24,10 @@ namespace CardGameTest.Entities
             playerStatusC = new StatusControl(_player);
             _monster = monster;
             _player.Status.Poison = 2;
-            _player.Status.Lock = 2;
-            _player.Status.Burn = 2;
+            _player.Status.Shock = 2;
             ResetPlayer();
             playerStatusC.HasAny();
-            playerStatusC.ActivateStatus();            
+            playerStatusC.ActivateStatus();
         }
 
         public static void PlayCard(Card card, int diceVal, int dicePos)
@@ -44,7 +43,7 @@ namespace CardGameTest.Entities
         }
 
         public static void PlayerAction()
-        {
+        {            
             bool checkSelection;
             do
             {
@@ -73,7 +72,7 @@ namespace CardGameTest.Entities
         private static void ResetPlayer()
         {
             _player.Dice = RollDice(_player.DiceQuant);
-            Game.CardsUsed = 0;
+            CardsUsed = 0;
             _player.PlayerBag.ResetHandCards();
         }
 
@@ -85,7 +84,7 @@ namespace CardGameTest.Entities
             for (int i = 0; i < diceQuant; i++)
             {
                 aux.Add(new Die(rand.Next(1, 7)));
-            }            
+            }
 
             return aux;
         }
@@ -110,8 +109,8 @@ namespace CardGameTest.Entities
                 dicePos = int.Parse(Console.ReadLine()) - 1;
 
                 selectedDie = _player.Dice[dicePos.Value].IsLocked ? 0 : _player.Dice[dicePos.Value].GetValue(_player);
-            } while (selectedDie == 0);           
-
+            } while (selectedDie == 0);
+            if (_player.Dice[dicePos.Value].IsBurned) _player.Dice[dicePos.Value].IsBurned = false;
             PlayCard(selectedCard, selectedDie, dicePos.Value);
         }
 
@@ -122,6 +121,8 @@ namespace CardGameTest.Entities
         public static void GainShield(Entity target, int shieldVal) => target.GainShield(shieldVal);
 
         public static void CreateDie(Entity target, int diceValue) => target.Dice.Add(new Die(diceValue));
+
+        public static void CreateDie(Entity target, Die die) => target.Dice.Add(die);
 
         public static void ChangeDiceValue(Entity target, int newValue)
         {
@@ -140,13 +141,32 @@ namespace CardGameTest.Entities
         {
             if (diceVal == 1)
             {
+                if (target.Dice[dicePos.Value].IsBlinded)
+                {
+                    CreateDie(target, CreateBlindDie(1));
+                    return;
+                }
                 CreateDie(target, 1);
                 return;
             }
             Random rand = new Random();
             int aux = diceVal - rand.Next(1, diceVal);
             target.Dice[dicePos.Value].Value = aux;
+            if (target.Dice[dicePos.Value].IsBlinded)
+            {
+                CreateDie(target, CreateBlindDie(diceVal - aux));
+                return;
+            }
             CreateDie(target, diceVal - aux);
+        }
+
+        private static Die CreateBlindDie(int diceVal)
+        {
+            Die aux = new Die(diceVal)
+            {
+                IsBlinded = true
+            };
+            return aux;
         }
 
         public static string CheckPlayerInfo(string playerStatus)
@@ -197,6 +217,11 @@ namespace CardGameTest.Entities
             return playerStatus.Trim();
         }
 
+        public static void RemoveShock(Entity target, int id)
+        {
+            if (target is Player) playerStatusC.RemoveShock(id);
+        }
+
         public static Monster GetCurrentMonster()
         {
             return _monster;
@@ -242,6 +267,11 @@ namespace CardGameTest.Entities
                     return false;
             }
             return true;
+        }
+
+        public static int GetCurrentDicePos()
+        {
+            return dicePos.Value;
         }
     }
 }

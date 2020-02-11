@@ -15,14 +15,15 @@ namespace CardGameTest.Entities.Cards
             act = Action;
         }
 
-        public Counterfeit (byte id) : this()
+        public Counterfeit(byte id) : this()
         {
             ID = id;
         }
 
         public override void Action(int diceVal)
-        {            
-            Game.CreateDie(Game.GetCurrentPlayer(), diceVal);
+        {
+            Player player = Game.GetCurrentPlayer();
+            Game.CreateDie(player, player.Dice[Game.GetCurrentDicePos()]);
             Game.CardsUsed++;
             Used = true;
         }

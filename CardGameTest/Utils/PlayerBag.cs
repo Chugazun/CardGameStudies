@@ -16,7 +16,7 @@ namespace CardGameTest.Utils
         {
             TempAddCardFromDb("Sword");
             TempAddCardFromDb("WoodenShield");
-            TempAddCardFromDb("Lockpick");
+            TempAddCardFromDb("Counterfeit");
         }
 
         public void TempAddCards() => handCards.AddRange(new Card[] { new Sword(SetID()), new Potion(SetID()), new Sword(SetID()) });
@@ -42,7 +42,12 @@ namespace CardGameTest.Utils
         public Card GetCardAt(int handPos)
         {
             return handCards[handPos];
-        }        
+        }
+
+        public List<Card> GetCards()
+        {
+            return handCards;
+        }
 
         public void ResetHandCards()
         {

@@ -32,5 +32,15 @@ namespace CardGameTest.Entities
 
             return sb.ToString()[0..^2];
         }
+
+        public override List<Card> GetCards()
+        {
+            return PlayerBag.GetCards();
+        }
+
+        public override Card GetCardAt(int handPos)
+        {
+            return PlayerBag.GetCardAt(handPos);
+        }
     }
 }

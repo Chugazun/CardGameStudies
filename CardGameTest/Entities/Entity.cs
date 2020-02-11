@@ -32,5 +32,15 @@ namespace CardGameTest.Entities
         {
             Status.Shield += shieldVal;
         }
+
+        public virtual List<Card> GetCards()
+        {
+            return null;
+        }
+
+        public virtual Card GetCardAt(int handPos)
+        {
+            return null;
+        }
     }
 }
