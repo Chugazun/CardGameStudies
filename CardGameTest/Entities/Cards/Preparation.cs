@@ -20,9 +20,13 @@ namespace CardGameTest.Entities.Cards
             ID = id;
         }
 
+        public override bool ConditionCheck(int diceVal)
+        {
+            return true;
+        }
+
         public override void Action(int diceVal)
         {
-            //Game.ValidAction();
             Game.ChangeDiceValue(Game.GetCurrentPlayer(), diceVal + 1);
             Game.CardsUsed++;
             Used = true;

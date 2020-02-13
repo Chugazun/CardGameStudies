@@ -14,5 +14,7 @@ namespace CardGameTest.Utils
         public int Blind { get; set; }
         public int Curse { get; set; }
         public int Shock { get; set; }
+        public int Resistance { get; set; }
+        public int Fury { get; set; }
     }
 }

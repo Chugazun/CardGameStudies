@@ -6,18 +6,23 @@ namespace CardGameTest.Entities
     class Screen
     {
         string playerInfo = "";
+        string monsterInfo = "";
         public void PrintScreen(Player currentPlayer, Monster currentMonster)
-        {   
+        {
             string playerHp = $"Player HP: {currentPlayer.CurrentHp}/{currentPlayer.MaxHp} ";
             string monsterHp = $"Monster HP: {currentMonster.CurrentHp}/{currentMonster.MaxHp} ";
-            
-            string monsterInfo = "";
+
+            //string monsterInfo = "";
 
             playerInfo = Game.CheckPlayerInfo(playerInfo);
-            Console.WriteLine($"----------------------------------------\n{monsterHp}  {monsterInfo}\n{playerHp}  {{{playerInfo}}}");
+            monsterInfo = Game.CheckMonsterInfo(monsterInfo);
+
+            Console.Write(Game.Log);
+            Console.WriteLine($"----------------------------------------\n{monsterHp}  {{{monsterInfo}}}\n{playerHp}  {{{playerInfo}}}");
             PrintPlayerHand(currentPlayer);
             PrintPlayerDice(currentPlayer);
-            PrintMenu();            
+            PrintMenu();
+            
         }
 
         private void PrintPlayerHand(Player player)

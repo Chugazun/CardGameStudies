@@ -20,21 +20,25 @@ namespace CardGameTest.Entities.Cards
             ID = id;
         }
 
+        public override bool ConditionCheck(int diceVal)
+        {
+            if (diceVal <= 5) return base.ConditionCheck(diceVal);
+
+            return false;
+        }
+
         public override void Action(int diceVal)
         {
-            if (diceVal <= 5)
+            if (diceVal % 2 == 0)
             {
-                Game.ValidAction();
-                if (diceVal % 2 == 0)
-                {
-                    Game.Damage(Game.GetCurrentMonster(), diceVal);                    
-                } else
-                {
-                    Game.GainShield(Game.GetCurrentPlayer(), diceVal);
-                }
-                Game.CardsUsed++;
-                Used = true;
+                Game.Damage(Game.GetCurrentMonster(), diceVal);
             }
+            else
+            {
+                Game.GainShield(Game.GetCurrentPlayer(), diceVal);
+            }
+            Game.CardsUsed++;
+            Used = true;
         }
     }
 }

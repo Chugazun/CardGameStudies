@@ -20,15 +20,18 @@ namespace CardGameTest.Entities.Cards
             ID = id;
         }
 
-        public override void Action(int diceVal)
+        public override bool ConditionCheck(int diceVal)
         {
-            if (diceVal <= 3)
-            {
-                Game.ValidAction();
-                Game.GainShield(Game.GetCurrentPlayer(), diceVal);
-                Game.CardsUsed++;
-                Used = true;
-            }
+            if (diceVal <= 3) return base.ConditionCheck(diceVal);
+
+            return false;
+        }
+
+        public override void Action(int diceVal)
+        {            
+            Game.GainShield(Game.GetCurrentPlayer(), diceVal);
+            Game.CardsUsed++;
+            Used = true;
         }
     }
 }

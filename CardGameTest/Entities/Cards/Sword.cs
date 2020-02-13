@@ -21,11 +21,10 @@ namespace CardGameTest.Entities.Cards
         }
 
         public override void Action(int diceVal)
-        {
-            Game.ValidAction();
+        {            
             Game.Damage(Game.GetCurrentMonster(), diceVal);
             Game.CardsUsed++;
-            Used = true;
+            Used = true;            
         }
     }
 }

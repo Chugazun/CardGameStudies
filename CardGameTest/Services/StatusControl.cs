@@ -13,12 +13,16 @@ namespace CardGameTest.Services
     {
         private Entity _entity;
         private List<Card> changedCards = new List<Card>();
+        private string persistentStatus = "Shield Poison";
         public int CurrentShield { get; private set; }
         public int CurrentPoison { get; private set; }
         public int CurrentBurn { get; private set; }
         public int CurrentLock { get; private set; }
         public int CurrentBlind { get; private set; }
         public int CurrentShock { get; private set; }
+        public int CurrentCurse { get; private set; }
+        public int CurrentResistance { get; private set; }
+        public int CurrentFury { get; private set; }
         public Action StatusList { get; private set; }
 
         public StatusControl(Entity entity)
@@ -26,14 +30,13 @@ namespace CardGameTest.Services
             _entity = entity;
         }
 
-        public void HasAny()
+        public void HasTurnStart()
         {
             if (_entity.Status.Shock > 0) StatusList += Shock;
             if (_entity.Status.Poison > 0) StatusList += Poison;
             if (_entity.Status.Lock > 0) StatusList += Lock;
             if (_entity.Status.Blind > 0) StatusList += Blind;
             if (_entity.Status.Burn > 0) StatusList += Burn;
-            //if (_entity.Status.Curse > 0) ;
             if (_entity.Status.Frost > 0) StatusList += Frost;
         }
 
@@ -57,7 +60,7 @@ namespace CardGameTest.Services
 
         private void Poison()
         {
-            Game.Damage(_entity, _entity.Status.Poison);
+            Game.TrueDamage(_entity, _entity.Status.Poison);
             _entity.Status.Poison--;
         }
 
@@ -111,10 +114,27 @@ namespace CardGameTest.Services
             for (int i = 0; i < _entity.Status.Frost; i++)
             {
                 if (i > _entity.Dice.Count - 1) break;
-                _entity.Dice[i].Value = 1;
+                Die die = _entity.Dice.FirstOrDefault(d => d.Value == _entity.Dice.Max(d => d.Value));
+                Game.Log.Append($"#D{_entity.Dice.FindIndex(d => d == die) + 1} - ");
+                Game.Log.AppendLine(die.ToString());
+                die.Value = 1;
             }
 
             _entity.Status.Frost = 0;
+        }
+
+        public bool Curse(byte selectedCard)
+        {
+            int curseChance = new Random().Next(1, 101);
+
+            if (curseChance <= 50)
+            {
+                _entity.Status.Curse--;
+                _entity.GetCards().FirstOrDefault(c => c.ID == selectedCard).Used = true;
+                return false;
+            }
+
+            return true;
         }
 
         public string GetStatusInfo(string statusBar)
@@ -159,6 +179,18 @@ namespace CardGameTest.Services
         {
             int index = _entity.GetCards().FindIndex(c => c.ID == id);
             _entity.GetCards()[index] = changedCards.FirstOrDefault(c => c.ID == id);
+        }
+
+        public void ResetEndTurnStatus()
+        {
+            Type status = _entity.Status.GetType();
+
+            List<PropertyInfo> properties = status.GetProperties().Where(p => (int)p.GetValue(_entity.Status) > 0).ToList();
+
+            properties.ForEach(v =>
+            {
+                if(!persistentStatus.Contains(v.Name)) v.SetValue(_entity.Status, 0);
+            });
         }
     }
 }

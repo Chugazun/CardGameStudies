@@ -10,11 +10,12 @@ namespace CardGameTest.Entities
     {
         static private Player _player;
         static private Monster _monster;
-        static private StatusControl playerStatusC;
+        static private StatusControl playerStatusC, monsterStatusC;
         static private Screen _screen;
         static private bool _dbUpdated = true, isValidAction = false;
         static private SeedingService _seedingService;
         static private int? dicePos;
+        public static StringBuilder Log { get; set; } = new StringBuilder();
         public static bool Initialized { get; set; }
         public static int CardsUsed { get; set; }
 
@@ -23,16 +24,20 @@ namespace CardGameTest.Entities
             _player = player;
             playerStatusC = new StatusControl(_player);
             _monster = monster;
+            monsterStatusC = new StatusControl(_monster);
             _player.Status.Poison = 2;
-            _player.Status.Shock = 2;
+            _monster.Status.Shield = 2;
             ResetPlayer();
-            playerStatusC.HasAny();
+            playerStatusC.HasTurnStart();
             playerStatusC.ActivateStatus();
         }
 
-        public static void PlayCard(Card card, int diceVal, int dicePos)
+        public static void PlayCard(Entity entity, Card card, int diceVal, int dicePos)
         {
-            if (!card.Used) card.act(diceVal);
+            if (!card.Used)
+            {
+                if (card.ConditionCheck(diceVal)) card.act(diceVal);
+            }
             if (isValidAction) UseDie(dicePos);
         }
 
@@ -43,7 +48,7 @@ namespace CardGameTest.Entities
         }
 
         public static void PlayerAction()
-        {            
+        {
             bool checkSelection;
             do
             {
@@ -64,9 +69,16 @@ namespace CardGameTest.Entities
         {
             //playerStatusC.CheckStatus();                    
             ResetPlayer();
-            playerStatusC.HasAny();
+            playerStatusC.HasTurnStart();
             playerStatusC.ActivateStatus();
             //UpdateScreen();
+        }
+
+        public static void EndTurn()
+        {
+            playerStatusC.ResetEndTurnStatus();
+            monsterStatusC.ResetEndTurnStatus();
+            NewTurn();
         }
 
         private static void ResetPlayer()
@@ -111,10 +123,23 @@ namespace CardGameTest.Entities
                 selectedDie = _player.Dice[dicePos.Value].IsLocked ? 0 : _player.Dice[dicePos.Value].GetValue(_player);
             } while (selectedDie == 0);
             if (_player.Dice[dicePos.Value].IsBurned) _player.Dice[dicePos.Value].IsBurned = false;
-            PlayCard(selectedCard, selectedDie, dicePos.Value);
+
+            if (_player.Status.Curse > 0 && !playerStatusC.Curse(selectedCard.ID))
+            {
+                UseDie(dicePos.Value);
+                return;
+            }
+
+            PlayCard(_player, selectedCard, selectedDie, dicePos.Value);
         }
 
-        public static void Damage(Entity target, int dmgVal) => target.TakeDamage(dmgVal);
+        public static void Damage(Entity target, int dmgVal)
+        {
+            int remainingDamage = target.DamageShield(dmgVal);
+            if (remainingDamage > 0) target.TakeDamage(remainingDamage);
+        }
+
+        public static void TrueDamage(Entity target, int dmgVal) => target.TakeDamage(dmgVal);
 
         public static void Heal(Entity target, int healVal) => target.TakeHealing(healVal);
 
@@ -217,6 +242,12 @@ namespace CardGameTest.Entities
             return playerStatus.Trim();
         }
 
+        public static string CheckMonsterInfo(string monsterStatus)
+        {
+            monsterStatus = monsterStatusC.GetStatusInfo(monsterStatus);
+            return monsterStatus.Trim();
+        }
+
         public static void RemoveShock(Entity target, int id)
         {
             if (target is Player) playerStatusC.RemoveShock(id);
@@ -260,7 +291,7 @@ namespace CardGameTest.Entities
                     break;
 
                 case 2:
-                    NewTurn();
+                    EndTurn();
                     break;
 
                 default:

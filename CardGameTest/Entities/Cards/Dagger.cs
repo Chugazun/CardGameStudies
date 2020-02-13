@@ -10,9 +10,9 @@ namespace CardGameTest.Entities.Cards
         {
             Uses = 2;
             Name = "Dagger (x" + Uses + ")";
-            Weight = 1;            
+            Weight = 1;
             Desc = "Deal 3 Damage (Uses: " + Uses + ")";
-            DiceNeeded = 1;            
+            DiceNeeded = 1;
             act = Action;
         }
 
@@ -21,21 +21,23 @@ namespace CardGameTest.Entities.Cards
             ID = id;
         }
 
-        public override void Action(int diceVal)
+        public override bool ConditionCheck(int diceVal)
         {
             if (Uses > 0)
             {
-                Game.ValidAction();
-                Game.Damage(Game.GetCurrentMonster(), 3);                
                 Uses--;
                 UpdateData();
-                Game.CardsUsed++;
             }
-            if (Uses <= 0)
-            {
-                Game.CardsUsed++;
-                Used = true;
-            }
+
+            if (Uses <= 0) Used = true;
+
+            return base.ConditionCheck(diceVal);
+        }
+
+        public override void Action(int diceVal)
+        {
+            Game.Damage(Game.GetCurrentMonster(), 3);
+            Game.CardsUsed++;
         }
 
         public void UpdateData()
@@ -49,6 +51,6 @@ namespace CardGameTest.Entities.Cards
             base.ResetCard();
             Uses = 2;
             UpdateData();
-        }        
+        }
     }
 }

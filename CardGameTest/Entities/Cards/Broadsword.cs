@@ -22,7 +22,7 @@ namespace CardGameTest.Entities.Cards
             ID = id;
         }
 
-        public override void Action(int diceVal)
+        public override bool ConditionCheck(int diceVal)
         {
             Game.ValidAction();
 
@@ -34,10 +34,16 @@ namespace CardGameTest.Entities.Cards
             else
             {
                 aux += diceVal;
-                Game.Damage(Game.GetCurrentMonster(), aux);
-                Game.CardsUsed++;
-                Used = true;
+                return true;
             }
+            return false;
+        }
+
+        public override void Action(int diceVal)
+        {
+            Game.Damage(Game.GetCurrentMonster(), aux);
+            Game.CardsUsed++;
+            Used = true;
         }
 
         private void UpdateData()

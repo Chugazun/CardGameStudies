@@ -26,7 +26,7 @@ namespace CardGameTest.Entities.Cards
             Random rand = new Random();
             Game.ChangeDiceValue(Game.GetCurrentPlayer(), rand.Next(1, 7));
             Game.CardsUsed++;
-            Used = true;
+            Used = true;            
         }
     }
 }

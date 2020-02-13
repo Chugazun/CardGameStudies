@@ -18,13 +18,13 @@ namespace CardGameTest.Entities.Cards
         public Lockpick(byte id) : this()
         {
             ID = id;
-        }
+        }        
 
         public override void Action(int diceVal)
         {            
             Game.SplitDiceValue(Game.GetCurrentPlayer(), diceVal);
             Game.CardsUsed++;
-            Used = true;
+            Used = true;           
         }
     }
 }

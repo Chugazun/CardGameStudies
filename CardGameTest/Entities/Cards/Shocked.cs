@@ -20,10 +20,9 @@ namespace CardGameTest.Entities.Cards
         }
 
         public override void Action(int diceVal)
-        {
-            Game.ValidAction();
+        {            
             Game.RemoveShock(Game.GetCurrentPlayer(), ID);
-            Used = true;
+            Used = true;            
         }
     }
 }
