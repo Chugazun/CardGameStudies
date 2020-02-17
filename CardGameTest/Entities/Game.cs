@@ -1,6 +1,8 @@
 ﻿using CardGameTest.Services;
+using Pastel;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Text;
 using System.Text.RegularExpressions;
 
@@ -26,7 +28,7 @@ namespace CardGameTest.Entities
             _monster = monster;
             monsterStatusC = new StatusControl(_monster);
             _player.Status.Poison = 2;
-            _player.Status.ReEquip = 1;
+            _monster.Status.Shield = 2;
             ResetPlayer();
             playerStatusC.HasTurnStart();
             playerStatusC.ActivateStatus();
@@ -133,15 +135,32 @@ namespace CardGameTest.Entities
 
         public static void Damage(Entity target, int dmgVal)
         {
-            int remainingDamage = target.DamageShield(dmgVal);
-            if (remainingDamage > 0) target.TakeDamage(remainingDamage);
+            if (target.Status.Dodge > 0)
+            {
+                monsterStatusC.Dodge();
+            }
+            else
+            {
+                int remainingDamage = target.DamageShield(dmgVal);
+                if (remainingDamage > 0)
+                {
+                    Type targetType = target.GetType();
+                    Log.AppendLine($"{targetType.Name} took {remainingDamage} damage!");
+                    target.TakeDamage(remainingDamage);
+                }
+            }
         }
 
         public static void TrueDamage(Entity target, int dmgVal) => target.TakeDamage(dmgVal);
 
         public static void Heal(Entity target, int healVal) => target.TakeHealing(healVal);
 
-        public static void GainShield(Entity target, int shieldVal) => target.GainShield(shieldVal);
+        public static void GainShield(Entity target, int shieldVal)
+        {
+            Type targetType = target.GetType();
+            Log.AppendLine($"{targetType.Name} gained {shieldVal} Shield!".Pastel(Color.Orange));
+            target.GainShield(shieldVal);
+        }
 
         public static void CreateDie(Entity target, int diceValue) => target.Dice.Add(new Die(diceValue));
 
@@ -301,6 +320,13 @@ namespace CardGameTest.Entities
         public static int GetCurrentDicePos()
         {
             return dicePos.Value;
+        }
+
+        public static string ShowLog()
+        {
+            string aux = Game.Log.ToString();
+            Game.Log.Clear();
+            return aux;
         }
     }
 }

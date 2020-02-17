@@ -1,5 +1,7 @@
-﻿using System;
+﻿using Pastel;
+using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Text;
 
 namespace CardGameTest.Entities
@@ -21,7 +23,11 @@ namespace CardGameTest.Entities
 
         public int GetValue(Entity target)
         {
-            if (IsBurned) Game.Damage(target, 2);
+            if (IsBurned)
+            {
+                Game.Damage(target, 2);
+                Game.Log.AppendLine("Took 2 Burn damage!".Pastel(Color.OrangeRed));
+            }
 
             return Value;
         }

@@ -17,7 +17,7 @@ namespace CardGameTest.Entities
             playerInfo = Game.CheckPlayerInfo(playerInfo);
             monsterInfo = Game.CheckMonsterInfo(monsterInfo);
 
-            Console.Write(Game.Log);
+            Console.Write(Game.ShowLog());
             Console.WriteLine($"----------------------------------------\n{monsterHp}  {{{monsterInfo}}}\n{playerHp}  {{{playerInfo}}}");
             PrintPlayerHand(currentPlayer);
             PrintPlayerDice(currentPlayer);

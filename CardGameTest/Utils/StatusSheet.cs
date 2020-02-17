@@ -17,5 +17,6 @@ namespace CardGameTest.Utils
         public int Resistance { get; set; }
         public int Fury { get; set; }        
         public int ReEquip { get; set; }
+        public int Dodge { get; set; }
     }
 }

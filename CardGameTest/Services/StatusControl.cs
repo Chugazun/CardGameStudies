@@ -1,7 +1,9 @@
 ﻿using CardGameTest.Entities;
 using CardGameTest.Entities.Cards;
+using Pastel;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -24,6 +26,7 @@ namespace CardGameTest.Services
         public int CurrentResistance { get; private set; }
         public int CurrentFury { get; private set; }
         public int CurrentReEquip { get; private set; }
+        public int CurrentDodge { get; private set; }
         public Action StatusList { get; private set; }
 
         public StatusControl(Entity entity)
@@ -62,6 +65,7 @@ namespace CardGameTest.Services
         private void Poison()
         {
             Game.TrueDamage(_entity, _entity.Status.Poison);
+            Game.Log.AppendLine($"Took {_entity.Status.Poison} Poison damage!".Pastel(Color.Purple));
             _entity.Status.Poison--;
         }
 
@@ -116,8 +120,8 @@ namespace CardGameTest.Services
             {
                 if (i > _entity.Dice.Count - 1) break;
                 Die die = _entity.Dice.FirstOrDefault(d => d.Value == _entity.Dice.Max(d => d.Value));
-                Game.Log.Append($"#D{_entity.Dice.FindIndex(d => d == die) + 1} - ");
-                Game.Log.AppendLine(die.ToString());
+                Game.Log.Append($"#D{_entity.Dice.FindIndex(d => d == die) + 1} - ".Pastel(Color.Cyan));
+                Game.Log.AppendLine(die.ToString().Pastel(Color.Cyan));
                 die.Value = 1;
             }
 
@@ -128,6 +132,7 @@ namespace CardGameTest.Services
         {
             card.act(diceVal);
             card.Used = false;
+            Game.Log.AppendLine($"{card.Name} Reused".Pastel(Color.Red));
             _entity.Status.Fury--;
         }
 
@@ -135,6 +140,7 @@ namespace CardGameTest.Services
         {
             card.act(diceVal);
             card.ResetCard();
+            Game.Log.AppendLine($"{card.Name} Re-Equipped!".Pastel(Color.LightGreen));
             _entity.Status.ReEquip--;
         }
 
@@ -146,10 +152,17 @@ namespace CardGameTest.Services
             {
                 _entity.Status.Curse--;
                 _entity.GetCards().FirstOrDefault(c => c.ID == selectedCard).Used = true;
+                Game.Log.AppendLine("Curse Activated!".Pastel(Color.DarkGray));
                 return true;
             }
 
             return false;
+        }
+
+        public void Dodge()
+        {
+            Game.Log.AppendLine("Attack Dodged!".Pastel(Color.Yellow));
+            _entity.Status.Dodge--;
         }
 
         public string GetStatusInfo(string statusBar)
@@ -192,7 +205,7 @@ namespace CardGameTest.Services
 
         public bool OnCardPlayStatus(Card card, int diceVal)
         {
-            if(_entity.Status.Curse > 0 && Curse(card.ID))
+            if (_entity.Status.Curse > 0 && Curse(card.ID))
             {
                 return false;
             }
@@ -202,7 +215,7 @@ namespace CardGameTest.Services
                 Fury(card, diceVal);
             }
 
-            if(_entity.Status.ReEquip > 0)
+            if (_entity.Status.ReEquip > 0)
             {
                 ReEquip(card, diceVal);
                 return false;
@@ -225,7 +238,7 @@ namespace CardGameTest.Services
 
             properties.ForEach(v =>
             {
-                if(!persistentStatus.Contains(v.Name)) v.SetValue(_entity.Status, 0);
+                if (!persistentStatus.Contains(v.Name)) v.SetValue(_entity.Status, 0);
             });
         }
     }

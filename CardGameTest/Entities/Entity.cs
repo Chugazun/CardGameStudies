@@ -1,6 +1,8 @@
 ﻿using CardGameTest.Utils;
+using Pastel;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 
 namespace CardGameTest.Entities
 {
@@ -38,6 +40,7 @@ namespace CardGameTest.Entities
         {
             int aux = dmgVal;
             dmgVal -= Status.Shield;
+            if (Status.Shield > 0) Game.Log.AppendLine($"{GetType().Name} lost {Math.Min(aux, Status.Shield)} Shield".Pastel(Color.Orange));
             Status.Shield = Math.Max(Status.Shield - aux, 0);
             return dmgVal;
         }
