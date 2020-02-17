@@ -41,7 +41,7 @@ namespace CardGameTest.Entities.Cards
 
         public override void Action(int diceVal)
         {
-            Game.Damage(Game.GetCurrentMonster(), aux);
+            Game.Damage(Game.GetCurrentMonster(), aux);            
             Game.CardsUsed++;
             Used = true;
         }

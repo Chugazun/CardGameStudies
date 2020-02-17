@@ -26,7 +26,7 @@ namespace CardGameTest.Entities
             _monster = monster;
             monsterStatusC = new StatusControl(_monster);
             _player.Status.Poison = 2;
-            _monster.Status.Shield = 2;
+            _player.Status.ReEquip = 1;
             ResetPlayer();
             playerStatusC.HasTurnStart();
             playerStatusC.ActivateStatus();
@@ -34,10 +34,8 @@ namespace CardGameTest.Entities
 
         public static void PlayCard(Entity entity, Card card, int diceVal, int dicePos)
         {
-            if (!card.Used)
-            {
-                if (card.ConditionCheck(diceVal)) card.act(diceVal);
-            }
+            if (!card.Used && card.ConditionCheck(diceVal) && playerStatusC.OnCardPlayStatus(card, diceVal)) card.act(diceVal);
+
             if (isValidAction) UseDie(dicePos);
         }
 

@@ -18,13 +18,13 @@ namespace CardGameTest.Entities.Cards
         public SuckerPunch(byte id) : this()
         {
             ID = id;
-        }
+        }        
 
         public override void Action(int diceVal)
         {            
             Game.Damage(Game.GetCurrentMonster(), 1);
             Random rand = new Random();
-            Game.ChangeDiceValue(Game.GetCurrentPlayer(), rand.Next(1, 7));
+            Game.CreateDie(Game.GetCurrentPlayer(), rand.Next(1, 7));
             Game.CardsUsed++;
             Used = true;            
         }

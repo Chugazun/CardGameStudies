@@ -13,7 +13,7 @@ namespace CardGameTest.Services
     {
         private Entity _entity;
         private List<Card> changedCards = new List<Card>();
-        private string persistentStatus = "Shield Poison";
+        private string persistentStatus = "Shield Poison Fury";
         public int CurrentShield { get; private set; }
         public int CurrentPoison { get; private set; }
         public int CurrentBurn { get; private set; }
@@ -23,6 +23,7 @@ namespace CardGameTest.Services
         public int CurrentCurse { get; private set; }
         public int CurrentResistance { get; private set; }
         public int CurrentFury { get; private set; }
+        public int CurrentReEquip { get; private set; }
         public Action StatusList { get; private set; }
 
         public StatusControl(Entity entity)
@@ -123,6 +124,20 @@ namespace CardGameTest.Services
             _entity.Status.Frost = 0;
         }
 
+        private void Fury(Card card, int diceVal)
+        {
+            card.act(diceVal);
+            card.Used = false;
+            _entity.Status.Fury--;
+        }
+
+        private void ReEquip(Card card, int diceVal)
+        {
+            card.act(diceVal);
+            card.ResetCard();
+            _entity.Status.ReEquip--;
+        }
+
         public bool Curse(byte selectedCard)
         {
             int curseChance = new Random().Next(1, 101);
@@ -131,10 +146,10 @@ namespace CardGameTest.Services
             {
                 _entity.Status.Curse--;
                 _entity.GetCards().FirstOrDefault(c => c.ID == selectedCard).Used = true;
-                return false;
+                return true;
             }
 
-            return true;
+            return false;
         }
 
         public string GetStatusInfo(string statusBar)
@@ -173,6 +188,27 @@ namespace CardGameTest.Services
                 StatusList();
                 StatusList = null;
             }
+        }
+
+        public bool OnCardPlayStatus(Card card, int diceVal)
+        {
+            if(_entity.Status.Curse > 0 && Curse(card.ID))
+            {
+                return false;
+            }
+
+            if (_entity.Status.Fury > 0)
+            {
+                Fury(card, diceVal);
+            }
+
+            if(_entity.Status.ReEquip > 0)
+            {
+                ReEquip(card, diceVal);
+                return false;
+            }
+
+            return true;
         }
 
         public void RemoveShock(int id)
