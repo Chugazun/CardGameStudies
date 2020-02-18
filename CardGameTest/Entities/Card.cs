@@ -12,8 +12,11 @@ namespace CardGameTest.Entities
         public string Desc { get; set; }
         public bool Used { get; set; }
         public int Uses { get; set; }
+        public bool IsWeakened { get; set; }
 
         public Action<int> act;
+
+        public Func<int, bool> condCheck;
 
         public virtual bool ConditionCheck(int diceVal)
         {
@@ -34,6 +37,16 @@ namespace CardGameTest.Entities
         public virtual void ResetCard()
         {
             Used = false;
+        }
+
+        public virtual void Weaken()
+        {
+            
+        }
+
+        public virtual void Normalize()
+        {
+            
         }
 
         public override string ToString()

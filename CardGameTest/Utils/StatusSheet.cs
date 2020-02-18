@@ -18,5 +18,6 @@ namespace CardGameTest.Utils
         public int Fury { get; set; }        
         public int ReEquip { get; set; }
         public int Dodge { get; set; }
+        public int Weaken { get; set; }
     }
 }

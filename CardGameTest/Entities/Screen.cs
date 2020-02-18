@@ -22,7 +22,7 @@ namespace CardGameTest.Entities
             PrintPlayerHand(currentPlayer);
             PrintPlayerDice(currentPlayer);
             PrintMenu();
-            
+
         }
 
         private void PrintPlayerHand(Player player)

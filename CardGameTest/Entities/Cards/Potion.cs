@@ -13,6 +13,7 @@ namespace CardGameTest.Entities.Cards
             Desc = "Heals for 2 (Even Only)";
             DiceNeeded = 1;
             act = Action;
+            condCheck = ConditionCheck;
         }
 
         public Potion(byte id) : this()

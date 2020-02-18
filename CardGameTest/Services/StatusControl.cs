@@ -27,6 +27,7 @@ namespace CardGameTest.Services
         public int CurrentFury { get; private set; }
         public int CurrentReEquip { get; private set; }
         public int CurrentDodge { get; private set; }
+        public int CurrentWeaken { get; private set; }
         public Action StatusList { get; private set; }
 
         public StatusControl(Entity entity)
@@ -37,6 +38,8 @@ namespace CardGameTest.Services
         public void HasTurnStart()
         {
             if (_entity.Status.Shock > 0) StatusList += Shock;
+            if (_entity.Status.Weaken > 0) StatusList += Weaken;
+
             if (_entity.Status.Poison > 0) StatusList += Poison;
             if (_entity.Status.Lock > 0) StatusList += Lock;
             if (_entity.Status.Blind > 0) StatusList += Blind;
@@ -60,6 +63,12 @@ namespace CardGameTest.Services
             }
 
             _entity.Status.Shock = 0;
+        }
+
+        private void Weaken()
+        {
+            _entity.GetCardAt(2).Weaken();
+            _entity.Status.Weaken--;
         }
 
         private void Poison()
@@ -228,6 +237,22 @@ namespace CardGameTest.Services
         {
             int index = _entity.GetCards().FindIndex(c => c.ID == id);
             _entity.GetCards()[index] = changedCards.FirstOrDefault(c => c.ID == id);
+            changedCards.Remove(changedCards.FirstOrDefault(c => c.ID == id));
+        }
+
+        public void ResetChangedCards()
+        {
+            List<Card> _changedCards = _entity.GetCards().Where(c => c is Shocked).ToList();
+            _changedCards.ForEach(c =>
+            {
+                RemoveShock(c.ID);
+            });
+
+            _changedCards = _entity.GetCards().Where(c => c.IsWeakened).ToList();
+            _changedCards.ForEach(c =>
+            {
+                c.Normalize();
+            });
         }
 
         public void ResetEndTurnStatus()

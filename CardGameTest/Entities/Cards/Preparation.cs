@@ -13,6 +13,7 @@ namespace CardGameTest.Entities.Cards
             Desc = "■: Dice value +1";
             DiceNeeded = 1;
             act = Action;
+            condCheck = ConditionCheck;
         }
 
         public Preparation(byte id) : this()

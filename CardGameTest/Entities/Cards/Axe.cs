@@ -13,6 +13,7 @@ namespace CardGameTest.Entities.Cards
             Desc = "Deals 2x ■ Damage (Max 4)";
             DiceNeeded = 1;
             act = Action;
+            condCheck = ConditionCheck;
         }
 
         public Axe(byte id) : this()
@@ -34,6 +35,27 @@ namespace CardGameTest.Entities.Cards
             Game.Damage(Game.GetCurrentMonster(), diceVal * 2);
             Game.CardsUsed++;
             Used = true;
+        }
+
+        public override void Weaken()
+        {
+            condCheck = diceVal =>
+            {
+                if (diceVal <= 3) return base.ConditionCheck(diceVal);
+                return false;
+            };
+
+            Name += "- (<=3)";
+            Desc = "Deals 2x ■ damage (Max 3)";
+            IsWeakened = true;
+        }
+
+        public override void Normalize()
+        {
+            condCheck = base.ConditionCheck;
+            Name = "Axe (<=4)";            
+            Desc = "Deals 2x ■ Damage (Max 4)";
+            IsWeakened = false;
         }
     }
 }

@@ -13,6 +13,7 @@ namespace CardGameTest.Entities.Cards
             Desc = "■: Duplicate a Die";
             DiceNeeded = 1;
             act = Action;
+            condCheck = ConditionCheck;
         }
 
         public Counterfeit(byte id) : this()
@@ -31,6 +32,26 @@ namespace CardGameTest.Entities.Cards
             Game.CreateDie(player, player.Dice[Game.GetCurrentDicePos()]);
             Game.CardsUsed++;
             Used = true;
+        }
+
+        public override void Weaken()
+        {
+            Name += "- (<=3)";
+            Desc += "(Max 3)";
+            IsWeakened = true;
+
+            condCheck = diceVal =>
+            {
+                return diceVal <= 3;
+            };
+        }
+
+        public override void Normalize()
+        {
+            Name = "Counterfeit";            
+            Desc = "■: Duplicate a Die";
+            IsWeakened = false;
+            condCheck = ConditionCheck;            
         }
     }
 }

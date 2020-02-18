@@ -13,6 +13,7 @@ namespace CardGameTest.Entities.Cards
             Desc = "Gives you ■ Shield (Max 3)";
             DiceNeeded = 1;
             act = Action;
+            condCheck = ConditionCheck;
         }
 
         public WoodenShield(byte id) : this()

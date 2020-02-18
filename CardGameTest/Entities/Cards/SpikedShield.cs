@@ -13,6 +13,7 @@ namespace CardGameTest.Entities.Cards
             Desc = "Even: Deal ■ Damage \nOdd: Gives ■ Shield \n(Max 5)";
             DiceNeeded = 1;
             act = Action;
+            condCheck = ConditionCheck;
         }
 
         public SpikedShield(byte id) : this()

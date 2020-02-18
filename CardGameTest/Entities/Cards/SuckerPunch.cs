@@ -13,6 +13,7 @@ namespace CardGameTest.Entities.Cards
             Desc = "■: Deals 1 Damage. Get a new Die";
             DiceNeeded = 1;
             act = Action;
+            condCheck = ConditionCheck;
         }
 
         public SuckerPunch(byte id) : this()

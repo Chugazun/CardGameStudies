@@ -12,6 +12,7 @@ namespace CardGameTest.Entities.Cards
             Desc = "■: Remove Shock";
             DiceNeeded = 1;
             act = Action;
+            condCheck = ConditionCheck;
         }
 
         public Shocked(byte id) : this()

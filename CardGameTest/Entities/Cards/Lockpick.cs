@@ -13,6 +13,7 @@ namespace CardGameTest.Entities.Cards
             Desc = "■: Split Die in Two";
             DiceNeeded = 1;
             act = Action;
+            condCheck = ConditionCheck;
         }
 
         public Lockpick(byte id) : this()

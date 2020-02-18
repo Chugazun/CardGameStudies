@@ -15,6 +15,7 @@ namespace CardGameTest.Entities.Cards
             Desc = "■ ■: Combine Dice";
             DiceNeeded = 2;
             act = Action;
+            condCheck = ConditionCheck;
         }
 
         public Spanner(byte id) : this()

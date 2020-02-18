@@ -13,6 +13,7 @@ namespace CardGameTest.Entities.Cards
             Desc = "■: Heals for 1 (Odd Only) (Reusable)";
             DiceNeeded = 1;
             act = Action;
+            condCheck = ConditionCheck;
         }
 
         public LesserRegeneration(byte id) : this()
@@ -33,6 +34,24 @@ namespace CardGameTest.Entities.Cards
         {
             Game.Heal(Game.GetCurrentPlayer(), 1);
             Game.CardsUsed++;
+        }
+
+        public override void Weaken()
+        {
+            Name = "Lesser Regeneration (O)";
+            Desc = "■: Heals for 1 (Odd Only)";
+            IsWeakened = true;
+
+            act += diceVal => Used = true;
+        }
+
+        public override void Normalize()
+        {
+            Name = "Lesser Regeneration (O)(R)";
+            Desc = "■: Heals for 1 (Odd Only) (Reusable)";
+            IsWeakened = false;
+
+            act = Action;
         }
     }
 }

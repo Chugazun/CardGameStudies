@@ -13,6 +13,7 @@ namespace CardGameTest.Entities.Cards
             Desc = "Deals ■ Damage, on 6, heals for 2";
             DiceNeeded = 1;
             act = Action;
+            condCheck = ConditionCheck;
         }
 
         public NatureStaff(byte id) : this()

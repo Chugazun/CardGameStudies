@@ -8,12 +8,12 @@ namespace CardGameTest.Entities.Cards
     {
         public Dagger()
         {
-            Uses = 2;
-            Name = "Dagger (x" + Uses + ")";
+            Name = "Dagger (R)(<=3)";
             Weight = 1;
-            Desc = "Deal 3 Damage (Uses: " + Uses + ")";
+            Desc = "Deal ■ Damage (Reusable) (Max 3)";
             DiceNeeded = 1;
             act = Action;
+            condCheck = ConditionCheck;
         }
 
         public Dagger(byte id) : this()
@@ -23,15 +23,8 @@ namespace CardGameTest.Entities.Cards
 
         public override bool ConditionCheck(int diceVal)
         {
-            if (Uses > 0)
-            {
-                Uses--;
-                UpdateData();
-            }
-
-            if (Uses <= 0) Used = true;
-
-            return base.ConditionCheck(diceVal);
+            if (diceVal <= 3) return base.ConditionCheck(diceVal);
+            return false;
         }
 
         public override void Action(int diceVal)
@@ -40,17 +33,26 @@ namespace CardGameTest.Entities.Cards
             Game.CardsUsed++;
         }
 
-        public void UpdateData()
+        public override void Weaken()
         {
-            Name = "Dagger (x" + Uses + ")";
-            Desc = "Deal 3 Damage (Uses: " + Uses + ")";
+            Name = "Dagger- (R)(=1)"; ;
+            Desc = "Deal ■ Damage (Reusable) (NEEDS 1)";
+            IsWeakened = true;
+
+            condCheck = diceVal =>
+            {
+                if (diceVal == 1) return base.ConditionCheck(diceVal);
+                return false;
+            };            
         }
 
-        public override void ResetCard()
+        public override void Normalize()
         {
-            base.ResetCard();
-            Uses = 2;
-            UpdateData();
+            Name = "Dagger (R)(<=3)"; ;
+            Desc = "Deal ■ Damage (Reusable) (Max 3)";
+            IsWeakened = false;
+
+            condCheck = ConditionCheck;
         }
     }
 }
