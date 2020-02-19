@@ -15,11 +15,11 @@ namespace ExercisesCore.Test_Program
             Screen sc = new Screen();
             Game.GameInit(new SeedingService(new cardgamedbContext()), sc);
             Random rand = new Random();
-            Player player = new Player(30);            
+            Player player = new Player(30);
 
-            Game.StartCombat(player, new Monster("Test", rand.Next(10, 21)));
             player.PlayerBag.AddCard(new Execute());
-            Game.Damage(player, 2);
+            Game.StartCombat(player, new Monster("Test", rand.Next(10, 21)));
+
 
             if (Game.Initialized)
             {

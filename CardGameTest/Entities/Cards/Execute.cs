@@ -13,8 +13,7 @@ namespace CardGameTest.Entities.Cards
         {
             Name = "Execute (=1)";
             Weight = 1;
-            Desc = "(NEEDS 1) Deals " + Game.CardsUsed + " Damage. Plus 1 Damage for each attack used";
-            currentDesc = Desc;
+            Desc = "(NEEDS 1) Deals " + Game.CardsUsed + " Damage. Plus 1 Damage for each attack used";            
             DiceNeeded = 1;
             act = Action;
             condCheck = ConditionCheck;
@@ -50,12 +49,12 @@ namespace CardGameTest.Entities.Cards
         {
             base.ResetCard();
             aux = 0;
-            Desc = currentDesc;
+            Desc = "(NEEDS 1) Deals " + Game.CardsUsed + " Damage. Plus 1 Damage for each attack used ";
         }
 
         public override void Weaken()
         {
-            Name += "(2D)";
+            Name = "Execute- (=1)(2D)";
             currentDesc = "(NEEDS 2 Dice)";
             DiceNeeded = 2;
             IsWeakened = true;

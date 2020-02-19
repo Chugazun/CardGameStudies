@@ -38,7 +38,7 @@ namespace CardGameTest.Entities.Cards
 
         public override void Weaken()
         {
-            Name = "Lesser Regeneration (O)";
+            Name = "Lesser Regeneration- (O)";
             Desc = "■: Heals for 1 (Odd Only)";
             IsWeakened = true;
 

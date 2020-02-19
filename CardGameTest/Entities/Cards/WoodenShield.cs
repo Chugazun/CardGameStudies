@@ -8,9 +8,9 @@ namespace CardGameTest.Entities.Cards
     {
         public WoodenShield()
         {
-            Name = "Wooden Shield";
+            Name = "Wooden Shield (<=4)";
             Weight = 2;
-            Desc = "Gives you ■ Shield (Max 3)";
+            Desc = "Gives you ■ Shield (Max 4)";
             DiceNeeded = 1;
             act = Action;
             condCheck = ConditionCheck;
@@ -23,7 +23,7 @@ namespace CardGameTest.Entities.Cards
 
         public override bool ConditionCheck(int diceVal)
         {
-            if (diceVal <= 3) return base.ConditionCheck(diceVal);
+            if (diceVal <= 4) return base.ConditionCheck(diceVal);
 
             return false;
         }
@@ -33,6 +33,28 @@ namespace CardGameTest.Entities.Cards
             Game.GainShield(Game.GetCurrentPlayer(), diceVal);
             Game.CardsUsed++;
             Used = true;
+        }
+
+        public override void Weaken()
+        {
+            Name = "Wooden Shield- (<=2)";
+            Desc = "Gives you ■ Shield (Max 2)";
+            IsWeakened = true;
+
+            condCheck = diceVal =>
+            {
+                if (diceVal <= 2) return base.ConditionCheck(diceVal);
+                return false;
+            };
+        }
+
+        public override void Normalize()
+        {
+            Name = "Wooden Shield (<=4)";
+            Desc = "Gives you ■ Shield (Max 4)";
+            IsWeakened = false;
+
+            condCheck = ConditionCheck;
         }
     }
 }

@@ -26,9 +26,25 @@ namespace CardGameTest.Entities
             CurrentHp -= (dmgVal - Status.Resistance);
         }
 
-        public void TakeHealing(int healVal)
+        public int TakeHealing(int healVal)
         {
-            CurrentHp += healVal;
+            if (CurrentHp != MaxHp)
+            {
+                if (CurrentHp + healVal < MaxHp)
+                {
+                    CurrentHp += healVal;
+                }
+                else
+                {
+                    healVal = MaxHp - CurrentHp;
+                    CurrentHp = MaxHp;
+                }
+                return healVal;
+            }
+            else
+            {
+                return 0;
+            }
         }
 
         public void GainShield(int shieldVal)

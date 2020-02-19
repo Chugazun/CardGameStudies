@@ -54,27 +54,41 @@ namespace CardGameTest.Services
                 if (i > _entity.GetCards().Count - 1) break;
                 int handPos = new Random().Next(_entity.GetCards().Count);
                 Card tempCard = _entity.GetCardAt(handPos);
-                Shocked shockedCard = new Shocked(tempCard.ID)
+                if (!(tempCard is Shocked))
                 {
-                    Name = tempCard.Name + " [S]"
-                };
-                changedCards.Add(tempCard);
-                _entity.GetCards()[handPos] = shockedCard;
+                    Shocked shockedCard = new Shocked(tempCard.ID)
+                    {
+                        Name = tempCard.Name + " [S]"
+                    };
+                    changedCards.Add(tempCard);
+                    _entity.GetCards()[handPos] = shockedCard;
+                }
             }
 
             _entity.Status.Shock = 0;
         }
 
         private void Weaken()
-        {
-            _entity.GetCardAt(2).Weaken();
-            _entity.Status.Weaken--;
+        {            
+            for (int i = 0; i < _entity.Status.Weaken; i++)
+            {
+                if (i > _entity.GetCards().Count - 1) break;
+                int handPos = new Random().Next(_entity.GetCards().Count);               
+                Card tempCard = _entity.GetCardAt(handPos);
+                if (!tempCard.IsWeakened)
+                {
+                    tempCard.Weaken();
+                    Game.Log.AppendLine($"{tempCard.Name.Substring(0, tempCard.Name.IndexOf("-"))} was Weakened!".Pastel(Color.DarkOrange));
+                }
+            }
+            
+            _entity.Status.Weaken = 0;
         }
 
         private void Poison()
         {
             Game.TrueDamage(_entity, _entity.Status.Poison);
-            Game.Log.AppendLine($"Took {_entity.Status.Poison} Poison damage!".Pastel(Color.Purple));
+            Game.Log.AppendLine($"{_entity.GetType().Name} took {_entity.Status.Poison} Poison damage!".Pastel(Color.Purple));
             _entity.Status.Poison--;
         }
 
@@ -130,7 +144,8 @@ namespace CardGameTest.Services
                 if (i > _entity.Dice.Count - 1) break;
                 Die die = _entity.Dice.FirstOrDefault(d => d.Value == _entity.Dice.Max(d => d.Value));
                 Game.Log.Append($"#D{_entity.Dice.FindIndex(d => d == die) + 1} - ".Pastel(Color.Cyan));
-                Game.Log.AppendLine(die.ToString().Pastel(Color.Cyan));
+                Game.Log.Append(die.ToString().Pastel(Color.Cyan));
+                Game.Log.AppendLine(" was Frozen!".Pastel(Color.Cyan));
                 die.Value = 1;
             }
 

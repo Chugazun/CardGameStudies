@@ -8,7 +8,7 @@ namespace CardGameTest.Entities.Cards
     {
         public SpikedShield()
         {
-            Name = "Spiked Shield";
+            Name = "Spiked Shield (<=5)";
             Weight = 2;
             Desc = "Even: Deal ■ Damage \nOdd: Gives ■ Shield \n(Max 5)";
             DiceNeeded = 1;
@@ -40,6 +40,28 @@ namespace CardGameTest.Entities.Cards
             }
             Game.CardsUsed++;
             Used = true;
+        }
+
+        public override void Weaken()
+        {
+            Name = "Spiked Shield (<=3)";           
+            Desc = "Even: Deal ■ Damage \nOdd: Gives ■ Shield \n(Max 3)";
+            IsWeakened = true;
+
+            condCheck = diceVal =>
+            {
+                if (diceVal <= 3) return base.ConditionCheck(diceVal);
+                return false;
+            };
+        }
+
+        public override void Normalize()
+        {
+            Name = "Spiked Shield (<=5)";
+            Desc = "Even: Deal ■ Damage \nOdd: Gives ■ Shield \n(Max 5)";
+            IsWeakened = false;
+
+            condCheck = ConditionCheck;
         }
     }
 }

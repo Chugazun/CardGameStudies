@@ -29,5 +29,29 @@ namespace CardGameTest.Entities.Cards
             Game.CardsUsed++;
             Used = true;            
         }
+
+        public override void Weaken()
+        {
+            Name += "-";
+            Desc = "■: Deals 1 Damage. Roll a 1";
+            IsWeakened = true;
+
+            act = diceVal =>
+            {
+                Game.Damage(Game.GetCurrentMonster(), 1);
+                Game.CreateDie(Game.GetCurrentPlayer(), 1);
+                Game.CardsUsed++;
+                Used = true;
+            };
+        }
+
+        public override void Normalize()
+        {
+            Name = "Sucker Punch";            
+            Desc = "■: Deals 1 Damage. Get a new Die";
+            IsWeakened = false;
+
+            act = Action;
+        }
     }
 }
