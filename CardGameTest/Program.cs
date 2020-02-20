@@ -20,7 +20,7 @@ namespace ExercisesCore.Test_Program
             player.PlayerBag.AddCard(new Execute());
             Game.StartCombat(player, new Monster("Test", rand.Next(10, 21)));
 
-
+            Game.Damage(player, 2);
             if (Game.Initialized)
             {
                 while (Game.GetCurrentMonster().CurrentHp > 0)

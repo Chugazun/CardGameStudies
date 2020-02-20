@@ -14,7 +14,7 @@ namespace CardGameTest.Entities.Cards
         {
             Name = "Spanner (2D)";
             Weight = 1;
-            Desc = "■ ■: Combine Dice";
+            Desc = "■ ■: Combine Dice (NEEDS 2 Dice)";
             currentDesc = Desc;
             DiceNeeded = 2;
             act = Action;
@@ -52,7 +52,7 @@ namespace CardGameTest.Entities.Cards
 
         private void UpdateData()
         {
-            Desc = Regex.Replace(Desc, Desc[Desc.IndexOf("2")].ToString(), "1");
+            Desc = Regex.Replace(Desc, "2", "1");
             Desc += " (Current value: " + aux + ")";
         }
 

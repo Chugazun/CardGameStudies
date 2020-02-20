@@ -65,7 +65,7 @@ namespace CardGameTest.Entities.Cards
                 {
                     Game.ValidAction();
                     aux++;
-                    currentDesc = Regex.Replace(currentDesc, currentDesc.Substring(currentDesc.IndexOf(" ") + 1, 1), aux.ToString());
+                    currentDesc = Regex.Replace(currentDesc, "2", "1");
                 }
 
                 return aux == DiceNeeded;
