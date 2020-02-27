@@ -30,6 +30,7 @@ namespace CardGameTest.Entities.Cards
                 aux = diceVal;
                 auxDicePos = Game.GetCurrentDicePos();
                 Game.ValidAction();
+                UpdateData();
                 return false;
             } else
             {
@@ -74,7 +75,7 @@ namespace CardGameTest.Entities.Cards
 
         private void UpdateData()
         {
-            Desc = Regex.Replace(Desc, "2", "1");
+            Desc = Regex.Replace(Desc, "2 Dice", "1 Die");
         }
 
         public override void ResetCard()

@@ -25,9 +25,8 @@ namespace CardGameTest.Entities
             _player = player;
             playerStatusC = new StatusControl(_player);
             _monster = monster;
-            monsterStatusC = new StatusControl(_monster);
-            _monster.Status.Poison = 4;
-            _player.Status.Weaken = 2;            
+            monsterStatusC = new StatusControl(_monster);            
+            _player.Status.Weaken = 2;
             ResetPlayer();
             playerStatusC.HasTurnStart();
             playerStatusC.ActivateStatus();
@@ -190,7 +189,7 @@ namespace CardGameTest.Entities
         public static void ChangeDiceValue(Entity target, int pos, int newValue)
         {
             Log.AppendLine($"#D{pos + 1}: {target.Dice[pos]} value was changed to {newValue}");
-            target.Dice[pos].Value = newValue;            
+            target.Dice[pos].Value = newValue;
         }
 
         public static void SplitDiceValue(Entity target, int diceVal)
