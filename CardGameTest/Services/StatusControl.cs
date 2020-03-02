@@ -15,10 +15,11 @@ namespace CardGameTest.Services
     {
         private Entity _entity;
         private List<Card> changedCards = new List<Card>();
-        private string persistentStatus = "Shield Poison Fury";
+        private string persistentStatus = "Shock Burn Frost Shield Poison Fury Thorns";
         public int CurrentShield { get; private set; }
         public int CurrentPoison { get; private set; }
         public int CurrentBurn { get; private set; }
+        public int CurrentFrost { get; private set; }
         public int CurrentLock { get; private set; }
         public int CurrentBlind { get; private set; }
         public int CurrentShock { get; private set; }
@@ -28,6 +29,7 @@ namespace CardGameTest.Services
         public int CurrentReEquip { get; private set; }
         public int CurrentDodge { get; private set; }
         public int CurrentWeaken { get; private set; }
+        public int CurrentThorns { get; private set; }
         public Action StatusList { get; private set; }
 
         public StatusControl(Entity entity)
@@ -37,6 +39,8 @@ namespace CardGameTest.Services
 
         public void HasTurnStart()
         {
+            if (_entity.Status.Thorns > 0) _entity.Status.Thorns = 0;
+
             if (_entity.Status.Shock > 0) StatusList += Shock;
             if (_entity.Status.Weaken > 0) StatusList += Weaken;
 
@@ -187,6 +191,11 @@ namespace CardGameTest.Services
         {
             Game.Log.AppendLine("Attack Dodged!".Pastel(Color.Yellow));
             _entity.Status.Dodge--;
+        }
+
+        public void ActivateThorns(Entity target)
+        {
+            Game.Damage(target, _entity.Status.Thorns);
         }
 
         public string GetStatusInfo(string statusBar)

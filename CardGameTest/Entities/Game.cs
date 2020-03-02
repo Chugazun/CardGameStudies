@@ -25,8 +25,9 @@ namespace CardGameTest.Entities
             _player = player;
             playerStatusC = new StatusControl(_player);
             _monster = monster;
-            monsterStatusC = new StatusControl(_monster);            
+            monsterStatusC = new StatusControl(_monster);
             _player.Status.Weaken = 2;
+            _monster.Status.Thorns = 2;
             ResetPlayer();
             playerStatusC.HasTurnStart();
             playerStatusC.ActivateStatus();
@@ -150,6 +151,7 @@ namespace CardGameTest.Entities
                     Type targetType = target.GetType();
                     Log.AppendLine($"{targetType.Name} took {remainingDamage} damage!");
                     target.TakeDamage(remainingDamage);
+                    if (target.Status.Thorns > 0) monsterStatusC.ActivateThorns(Game.GetCurrentPlayer());
                 }
             }
         }
