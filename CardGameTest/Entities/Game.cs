@@ -16,9 +16,11 @@ namespace CardGameTest.Entities
         static private bool _dbUpdated = true, isValidAction = false;
         static private SeedingService _seedingService;
         static private int? dicePos;
+        static private Action startOfTurnEffects;
         public static StringBuilder Log { get; set; } = new StringBuilder();
         public static bool Initialized { get; set; }
         public static int CardsUsed { get; set; }
+
 
         public static void StartCombat(Player player, Monster monster)
         {
@@ -27,12 +29,13 @@ namespace CardGameTest.Entities
             _monster = monster;
             monsterStatusC = new StatusControl(_monster);
             _player.Status.Weaken = 2;
-            _monster.Status.Thorns = 2;
-            ResetPlayer();
-            playerStatusC.HasTurnStart();
-            playerStatusC.ActivateStatus();
-            monsterStatusC.HasTurnStart();
-            monsterStatusC.ActivateStatus();
+            _player.Status.Fury = 1;
+            NewTurn();
+            //ResetPlayer();
+            //playerStatusC.HasTurnStart();
+            //playerStatusC.ActivateStatus();
+            //monsterStatusC.HasTurnStart();
+            //monsterStatusC.ActivateStatus();//Old new turn stuff...
         }
 
         public static void PlayCard(Entity entity, Card card, int diceVal, int dicePos)
@@ -70,12 +73,24 @@ namespace CardGameTest.Entities
         {
             //playerStatusC.CheckStatus();                    
             ResetPlayer();
+            startOfTurnEffects?.Invoke();
             playerStatusC.HasTurnStart();
             playerStatusC.ActivateStatus();
             monsterStatusC.HasTurnStart();
             monsterStatusC.ActivateStatus();
             //UpdateScreen();
         }
+
+        public static void AddTurnStartEffect(Action effect)
+        {
+            startOfTurnEffects += effect;
+        }
+
+        public static void RemoveTurnStartEffect(Action effect)
+        {
+            startOfTurnEffects -= effect;
+        }
+
 
         public static void EndTurn()
         {

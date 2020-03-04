@@ -81,8 +81,9 @@ namespace CardGameTest.Services
                 Card tempCard = _entity.GetCardAt(handPos);
                 if (!tempCard.IsWeakened)
                 {
+                    Game.Log.AppendLine($"{tempCard.Name} was Weakened!".Pastel(Color.DarkOrange));
                     tempCard.Weaken();
-                    Game.Log.AppendLine($"{tempCard.Name.Substring(0, tempCard.Name.IndexOf("-"))} was Weakened!".Pastel(Color.DarkOrange));
+                    //Game.Log.AppendLine($"{tempCard.Name.Substring(0, tempCard.Name.IndexOf("-"))} was Weakened!".Pastel(Color.DarkOrange));
                 }
             }
             
@@ -160,7 +161,7 @@ namespace CardGameTest.Services
         {
             card.act(diceVal);
             card.Used = false;
-            Game.Log.AppendLine($"{card.Name} Reused".Pastel(Color.Red));
+            Game.Log.AppendLine($"{(card.Name.Contains("(") ? card.Name.Substring(0, card.Name.IndexOf("(") - 1) : card.Name)} Reused".Pastel(Color.Red));
             _entity.Status.Fury--;
         }
 
@@ -168,7 +169,7 @@ namespace CardGameTest.Services
         {
             card.act(diceVal);
             card.ResetCard();
-            Game.Log.AppendLine($"{card.Name} Re-Equipped!".Pastel(Color.LightGreen));
+            Game.Log.AppendLine($"{(card.Name.Contains("(") ? card.Name.Substring(0, card.Name.IndexOf("(") - 1) : card.Name)} Re-Equipped!".Pastel(Color.LightGreen));
             _entity.Status.ReEquip--;
         }
 

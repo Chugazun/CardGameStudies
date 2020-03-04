@@ -2,6 +2,7 @@
 using CardGameTest.Entities.Cards;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace CardGameTest.Utils
@@ -16,7 +17,7 @@ namespace CardGameTest.Utils
         {
             TempAddCardFromDb("Sword");
             TempAddCardFromDb("WoodenShield");
-            TempAddCardFromDb("Catastrophe");
+            TempAddCardFromDb("ColdWind");
         }
 
         public void TempAddCards() => handCards.AddRange(new Card[] { new Sword(SetID()), new Potion(SetID()), new Sword(SetID()) });
@@ -42,6 +43,10 @@ namespace CardGameTest.Utils
         public Card GetCardAt(int handPos)
         {
             return handCards[handPos];
+        }
+        public Card GetCardAt(byte id)
+        {
+            return handCards.FirstOrDefault(c => c.ID == id);
         }
 
         public List<Card> GetCards()

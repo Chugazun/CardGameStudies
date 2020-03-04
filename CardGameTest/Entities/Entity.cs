@@ -70,5 +70,10 @@ namespace CardGameTest.Entities
         {
             return null;
         }
+
+        public virtual Card GetCardAt(byte id)
+        {
+            return null;
+        }
     }
 }

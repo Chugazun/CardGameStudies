@@ -42,5 +42,10 @@ namespace CardGameTest.Entities
         {
             return PlayerBag.GetCardAt(handPos);
         }
+
+        public override Card GetCardAt(byte id)
+        {
+            return PlayerBag.GetCardAt(id);
+        }
     }
 }
