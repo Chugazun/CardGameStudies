@@ -1,23 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace CardGameTest.Entities.Cards
 {
-    class ActionC : Card
+    class CounterSpell : Card
     {
         private int aux;
-        public ActionC()
+        public CounterSpell()
         {
-            Name = "Action!";
-            Desc = "Keep a ■ for next turn";
+            Name = "Counter Spell";
+            Desc = "If enemy rolls ■, that die is Locked";
             Weight = 1;
             DiceNeeded = 1;
             act = Action;
             condCheck = ConditionCheck;
         }
 
-        public ActionC(byte id) : this()
+        public CounterSpell(byte id) : this()
         {
             ID = id;
         }
@@ -25,7 +26,7 @@ namespace CardGameTest.Entities.Cards
         public override void Action(int diceVal)
         {
             aux = diceVal;
-            Game.AddTurnStartEffect(DiceSave);
+            Game.AddTurnStartEffect(CheckRoll);
             Game.CardsUsed++;
             Used = true;
         }
@@ -45,17 +46,21 @@ namespace CardGameTest.Entities.Cards
 
         public override void Normalize()
         {
-            Name = "Action!";
-            Desc = "Keep a ■ for next turn";
+            Name = "Counter Spell";
+            Desc = "If enemy rolls ■, that die is Locked";
             IsWeakened = false;
 
             condCheck = ConditionCheck;
         }
 
-        private void DiceSave()
-        {                      
-            Game.CreateDie(Game.GetCurrentPlayer(), aux);
-            Game.RemoveTurnStartEffect(DiceSave);
+        private void CheckRoll()
+        {
+            Player currentPlayer = Game.GetCurrentPlayer();
+            List<Die> selectedDice = currentPlayer.Dice
+                                                   .Where(d => d.Value == aux && !d.IsLocked)                                                   
+                                                   .ToList();
+            selectedDice.ForEach(die => die.IsLocked = true);
+            Game.RemoveTurnStartEffect(CheckRoll);
         }
     }
 }

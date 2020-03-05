@@ -10,8 +10,7 @@ namespace CardGameTest.Entities
         public int Weight { get; set; }
         public int DiceNeeded { get; set; }
         public string Desc { get; set; }
-        public bool Used { get; set; }
-        public int Uses { get; set; }
+        public bool Used { get; set; }        
         public bool IsWeakened { get; set; }
 
         public Action<int> act;
@@ -19,7 +18,7 @@ namespace CardGameTest.Entities
         public Func<int, bool> condCheck;
 
         public virtual bool ConditionCheck(int diceVal)
-        {
+        {            
             Game.ValidAction();
             return true;
         }

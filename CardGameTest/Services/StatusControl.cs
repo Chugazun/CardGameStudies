@@ -81,7 +81,7 @@ namespace CardGameTest.Services
                 Card tempCard = _entity.GetCardAt(handPos);
                 if (!tempCard.IsWeakened)
                 {
-                    Game.Log.AppendLine($"{tempCard.Name} was Weakened!".Pastel(Color.DarkOrange));
+                    Game.Log.AppendLine($"{(tempCard.Name.Contains("(") ? tempCard.Name.Substring(0, tempCard.Name.IndexOf("(") - 1) : tempCard.Name)} was Weakened!".Pastel(Color.DarkOrange));
                     tempCard.Weaken();
                     //Game.Log.AppendLine($"{tempCard.Name.Substring(0, tempCard.Name.IndexOf("-"))} was Weakened!".Pastel(Color.DarkOrange));
                 }
@@ -175,9 +175,9 @@ namespace CardGameTest.Services
 
         public bool Curse(byte selectedCard)
         {
-            int curseChance = new Random().Next(1, 101);
+            int curseChance = new Random().Next(100);
 
-            if (curseChance <= 50)
+            if (curseChance < 50)
             {
                 _entity.Status.Curse--;
                 _entity.GetCards().FirstOrDefault(c => c.ID == selectedCard).Used = true;
@@ -230,11 +230,8 @@ namespace CardGameTest.Services
         public void ActivateStatus()
         {
             Console.WriteLine(_entity.Status.Poison);
-            if (StatusList != null)
-            {
-                StatusList();
-                StatusList = null;
-            }
+            StatusList?.Invoke();
+            StatusList = null;
         }
 
         public bool OnCardPlayStatus(Card card, int diceVal)

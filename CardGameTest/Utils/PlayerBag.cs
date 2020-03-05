@@ -17,7 +17,7 @@ namespace CardGameTest.Utils
         {
             TempAddCardFromDb("Sword");
             TempAddCardFromDb("WoodenShield");
-            TempAddCardFromDb("ColdWind");
+            TempAddCardFromDb("CounterSpell");
         }
 
         public void TempAddCards() => handCards.AddRange(new Card[] { new Sword(SetID()), new Potion(SetID()), new Sword(SetID()) });

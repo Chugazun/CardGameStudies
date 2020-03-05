@@ -29,7 +29,7 @@ namespace CardGameTest.Entities
             _monster = monster;
             monsterStatusC = new StatusControl(_monster);
             _player.Status.Weaken = 2;
-            _player.Status.Fury = 1;
+            //_player.Status.Fury = 1;
             NewTurn();
             //ResetPlayer();
             //playerStatusC.HasTurnStart();

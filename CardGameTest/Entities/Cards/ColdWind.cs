@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace CardGameTest.Entities.Cards
+﻿namespace CardGameTest.Entities.Cards
 {
     class ColdWind : Card
     {
@@ -70,7 +66,7 @@ namespace CardGameTest.Entities.Cards
 
         private void UpdateData()
         {
-            Desc += "(Current Value: " + aux + ")";            
+            Desc += " (Current Value: " + aux + ")";            
         }
 
         public override void ResetCard()
